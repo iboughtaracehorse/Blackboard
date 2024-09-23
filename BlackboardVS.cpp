@@ -37,8 +37,8 @@ struct Board {
 	}
 
 	void drawFigures() {
-		for (auto& figure : figures) {
-			// draw figure 
+		for (Figure* figure : figures) {
+			figure->draw();
 		}
 	}
 
@@ -65,6 +65,8 @@ public:
 	string getType() {
 		return TYPE;
 	}
+
+	virtual void draw() = 0;
 
 };
 
@@ -128,13 +130,17 @@ int main() {
 	Board board;
 
 	Triangle* triangle = new Triangle(board, 10, 10, 5);
-	Square* square = new Square(board, 20, 20, 3);
+	//Square* square = new Square(board, 20, 20, 3);
 
 	board.addFigure(triangle);
-	board.addFigure(square);
+	//board.addFigure(square);
+
+	board.drawFigures();
 	
 	board.print();
-	board.list();
+	//board.list();
+
+	delete triangle;
 
 	return 0;
 
