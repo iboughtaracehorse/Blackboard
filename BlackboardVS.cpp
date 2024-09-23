@@ -35,6 +35,18 @@ struct Board {
 	void addFigure(Figure* figure) {
 		figures.push_back(figure);
 	}
+
+	void drawFigures() {
+		for (auto& figure : figures) {
+			// draw figure 
+		}
+	}
+
+	void list() {
+		for (auto& figure : figures) {
+			//cout << figure->getType();
+		}
+	}
 };
 
 class Figure {
@@ -43,11 +55,16 @@ protected:
 	int X;
 	int Y;
 	int HEIGHT;
+	string TYPE;
 	vector<vector<char>>* grid;
 
 public:
 
 	Figure(Board& board) { X = 0; Y = 0; HEIGHT = 0; grid = &board.getGrid(); }
+
+	string getType() {
+		return TYPE;
+	}
 
 };
 
@@ -55,7 +72,7 @@ class Square: public Figure {
 
 public:
 	Square(Board& board, int x, int y, int height) : Figure(board) {
-		X = x; Y = y; HEIGHT = height;
+		X = x; Y = y; HEIGHT = height, TYPE = "square";
 	};
 
 	void draw() {
@@ -79,7 +96,7 @@ class Triangle: public Figure {
 public:
 
 	Triangle(Board& board, int x, int y, int height) : Figure(board) {
-		X = x; Y = y; HEIGHT = height;
+		X = x; Y = y; HEIGHT = height, TYPE = "triangle";
 	};
 
 	void draw() {
@@ -117,6 +134,7 @@ int main() {
 	board.addFigure(square);
 	
 	board.print();
+	board.list();
 
 	return 0;
 
