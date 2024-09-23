@@ -24,12 +24,11 @@ public:
 
 	Figure(Board& board) { X = 0; Y = 0; HEIGHT = 0; }
 
+	virtual void draw() = 0;
+
 	string getType() {
 		return TYPE;
 	}
-
-	virtual void draw() = 0;
-
 };
 
 struct Board {
@@ -37,7 +36,7 @@ struct Board {
 	vector<vector<char>> grid;
 	vector<Figure*> figures;
 
-	Board() : grid(BOARD_HEIGHT, vector<char>(BOARD_WIDTH, '-')) {}
+	Board() : grid(BOARD_HEIGHT, vector<char>(BOARD_WIDTH, ' ')) {}
 
 	void print() {
 		for (auto& row : grid) {
@@ -64,7 +63,7 @@ struct Board {
 
 	void list() {
 		for (auto& figure : figures) {
-			//cout << figure->getType();
+			cout << figure->getType();
 		}
 	}
 };
@@ -131,16 +130,17 @@ int main() {
 
 	Board board;
 
-	Triangle* triangle = new Triangle(board, 10, 10, 5);
-	//Square* square = new Square(board, 20, 20, 3);
+	Triangle* triangle = new Triangle(board, 20, 10, 5);
+	Square* square = new Square(board, 10, 10, 20);
 
 	board.addFigure(triangle);
-	//board.addFigure(square);
+	board.addFigure(square);
 
 	board.drawFigures();
 	
 	board.print();
-	//board.list();
+	
+	board.list();
 
 	delete triangle;
 
