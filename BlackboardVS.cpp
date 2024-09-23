@@ -10,10 +10,12 @@ using namespace std;
 const int BOARD_WIDTH = 80;
 const int BOARD_HEIGHT = 25;
 
+class Figure;
+
 struct Board {
 
 	vector<vector<char>> grid;
-	//vector<Figure> figures;
+	vector<Figure*> figures;
 
 	Board() : grid(BOARD_HEIGHT, vector<char>(BOARD_WIDTH, '-')) {}
 
@@ -30,8 +32,8 @@ struct Board {
 		return grid;
 	}
 
-	void addTriangle() {
-		//Triangle triangle;
+	void addFigure(Figure* figure) {
+		figures.push_back(figure);
 	}
 };
 
