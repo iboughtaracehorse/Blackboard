@@ -63,7 +63,7 @@ struct Board {
 
 	void list() {
 		for (auto& figure : figures) {
-			cout << figure->getType();
+			cout << figure->getType() << "  " << endl;
 		}
 	}
 };
@@ -80,13 +80,18 @@ public:
 	void draw() {
 		if (HEIGHT <= 0) return;
 		for (int i = 0; i < HEIGHT; ++i) {
+			int posY = Y + i;
+
 			for (int j = 0; j < HEIGHT; ++j) {
-				if (j == 0 || j == Y + HEIGHT) {
-					(*grid)[i][j] = '*';
+				int posX = X + j;
+
+				if (i == 0 || i == HEIGHT - 1) {
+					(*grid)[posY][posX] = '*';
 				}
+
 				else {
-					(*grid)[i][0] = '*';
-					(*grid)[i][HEIGHT] = '*';
+					(*grid)[posY][posX] = '*';
+					(*grid)[posY][HEIGHT - 1] = '*';
 				}
 			}
 		}
@@ -131,7 +136,7 @@ int main() {
 	Board board;
 
 	Triangle* triangle = new Triangle(board, 20, 10, 5);
-	Square* square = new Square(board, 10, 10, 20);
+	Square* square = new Square(board, 20, 20, 5);
 
 	board.addFigure(triangle);
 	board.addFigure(square);
