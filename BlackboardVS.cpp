@@ -10,7 +10,27 @@ using namespace std;
 const int BOARD_WIDTH = 80;
 const int BOARD_HEIGHT = 25;
 
-class Figure;
+struct Board;
+
+class Figure {
+
+protected:
+	int X;
+	int Y;
+	int HEIGHT;
+	string TYPE;
+
+public:
+
+	Figure(Board& board) { X = 0; Y = 0; HEIGHT = 0; }
+
+	string getType() {
+		return TYPE;
+	}
+
+	virtual void draw() = 0;
+
+};
 
 struct Board {
 
@@ -49,32 +69,13 @@ struct Board {
 	}
 };
 
-class Figure {
+class Square: public Figure {
 
-protected: 
-	int X;
-	int Y;
-	int HEIGHT;
-	string TYPE;
 	vector<vector<char>>* grid;
 
 public:
-
-	Figure(Board& board) { X = 0; Y = 0; HEIGHT = 0; grid = &board.getGrid(); }
-
-	string getType() {
-		return TYPE;
-	}
-
-	virtual void draw() = 0;
-
-};
-
-class Square: public Figure {
-
-public:
 	Square(Board& board, int x, int y, int height) : Figure(board) {
-		X = x; Y = y; HEIGHT = height, TYPE = "square";
+		X = x; Y = y; HEIGHT = height, TYPE = "square", grid = &board.getGrid();;
 	};
 
 	void draw() {
@@ -95,10 +96,12 @@ public:
 
 class Triangle: public Figure {
 
+	vector<vector<char>>* grid;
+
 public:
 
 	Triangle(Board& board, int x, int y, int height) : Figure(board) {
-		X = x; Y = y; HEIGHT = height, TYPE = "triangle";
+		X = x; Y = y; HEIGHT = height, TYPE = "triangle"; grid = &board.getGrid();
 	};
 
 	void draw() {
@@ -122,7 +125,6 @@ public:
 		}
 	}
 };
-
 
 
 int main() {
