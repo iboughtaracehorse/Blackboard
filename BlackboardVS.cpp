@@ -61,7 +61,15 @@ public:
 	void draw() {
 		if (HEIGHT <= 0) return;
 		for (int i = 0; i < HEIGHT; ++i) {
-			// draw square i guess
+			for (int j = 0; j < HEIGHT; ++j) {
+				if (j == 0 || j == Y + HEIGHT) {
+					(*grid)[i][j] = '*';
+				}
+				else {
+					(*grid)[i][0] = '*';
+					(*grid)[i][HEIGHT] = '*';
+				}
+			}
 		}
 	}
 };
@@ -100,6 +108,8 @@ public:
 
 int main() {
 	Board board;
+	Triangle triangle(board, 10, 10, 5);
+	//board.addFigure(triangle);
 	
 	board.print();
 	return 0;
