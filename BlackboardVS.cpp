@@ -107,12 +107,19 @@ public:
 
 
 int main() {
+
 	Board board;
-	Triangle triangle(board, 10, 10, 5);
-	//board.addFigure(triangle);
+
+	Triangle* triangle = new Triangle(board, 10, 10, 5);
+	Square* square = new Square(board, 20, 20, 3);
+
+	board.addFigure(triangle);
+	board.addFigure(square);
 	
 	board.print();
+
 	return 0;
+
 };
 
 
