@@ -13,6 +13,7 @@ const int BOARD_HEIGHT = 25;
 struct Board {
 
 	vector<vector<char>> grid;
+	//vector<Figure> figures;
 
 	Board() : grid(BOARD_HEIGHT, vector<char>(BOARD_WIDTH, '-')) {}
 
@@ -28,40 +29,55 @@ struct Board {
 	vector<vector<char>>& getGrid() {
 		return grid;
 	}
+
+	void addTriangle() {
+		//Triangle triangle;
+	}
 };
 
 class Figure {
 
 protected: 
-	int x;
-	int y;
-	int height;
+	int X;
+	int Y;
+	int HEIGHT;
 	vector<vector<char>>* grid;
 
 public:
 
-	Figure(Board& board) { x = 0; y = 0; height = 0; grid = &board.getGrid(); }
+	Figure(Board& board) { X = 0; Y = 0; HEIGHT = 0; grid = &board.getGrid(); }
 
 };
 
 class Square: public Figure {
 
 public:
-	Square(Board& board) : Figure(board) {};
+	Square(Board& board, int x, int y, int height) : Figure(board) {
+		X = x; Y = y; HEIGHT = height;
+	};
+
+	void draw() {
+		if (HEIGHT <= 0) return;
+		for (int i = 0; i < HEIGHT; ++i) {
+			// draw square i guess
+		}
+	}
 };
 
 class Triangle: public Figure {
 
 public:
 
-	Triangle(Board& board) : Figure(board) {};
+	Triangle(Board& board, int x, int y, int height) : Figure(board) {
+		X = x; Y = y; HEIGHT = height;
+	};
 
 	void draw() {
-		if (height <= 0) return;
-		for (int i = 0; i < height; ++i) {
-			int leftMost = x - i;
-			int rightMost = x + i;
-			int posY = y + i;
+		if (HEIGHT <= 0) return;
+		for (int i = 0; i < HEIGHT; ++i) {
+			int leftMost = X - i;
+			int rightMost = X + i;
+			int posY = Y + i;
 			if (posY < BOARD_HEIGHT) {
 				if (leftMost >= 0 && leftMost < BOARD_WIDTH)
 					(*grid)[posY][leftMost] = '*';
@@ -69,9 +85,9 @@ public:
 					(*grid)[posY][rightMost] = '*';
 			}
 		}
-		for (int j = 0; j < 2 * height - 1; ++j) {
-			int baseX = x - height + 1 + j;
-			int baseY = y + height - 1;
+		for (int j = 0; j < 2 * HEIGHT - 1; ++j) {
+			int baseX = X - HEIGHT + 1 + j;
+			int baseY = Y + HEIGHT - 1;
 			if (baseX >= 0 && baseX < BOARD_WIDTH && baseY < BOARD_HEIGHT)
 				(*grid)[baseY][baseX] = '*';
 		}
