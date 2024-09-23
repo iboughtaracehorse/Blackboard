@@ -11,12 +11,23 @@ const int BOARD_WIDTH = 80;
 const int BOARD_HEIGHT = 25;
 
 class Figure {
-	
+
+protected: 
+	int X;
+	int Y;
+	int HEIGHT;
+
+public:
+	Figure(int x, int y, int height) { X = x; Y = y; HEIGHT = height; }
+
 };
 
 struct Board {
+
 	std::vector<std::vector<char>> grid;
-	Board() : grid(BOARD_HEIGHT, std::vector<char>(BOARD_WIDTH, ' ')) {}
+
+	Board() : grid(BOARD_HEIGHT, std::vector<char>(BOARD_WIDTH, '-')) {}
+
 	void print() {
 		for (auto& row : grid) {
 			for (char c : row) {
@@ -25,6 +36,7 @@ struct Board {
 			std::cout << "\n";
 		}
 	}
+
 	void drawTriangle(int x, int y, int height) {
 		if (height <= 0) return; 
 		for (int i = 0; i < height; ++i) {
@@ -50,7 +62,6 @@ struct Board {
 int main() {
 	Board board;
 	board.drawTriangle(10, 1, 5);
-	board.drawTriangle(13, 1, 7);
 	board.print();
 	return 0;
 };
