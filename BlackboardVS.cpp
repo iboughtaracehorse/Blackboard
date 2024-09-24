@@ -82,8 +82,12 @@ public:
 		for (int i = 0; i < HEIGHT; ++i) {
 			int posY = Y + i;
 
+			if (posY < 0 || posY >= BOARD_HEIGHT) continue;
+
 			for (int j = 0; j < HEIGHT; ++j) {
 				int posX = X + j;
+
+				if (posX < 0 || posX >= BOARD_WIDTH) continue;
 
 				if (i == 0 || i == HEIGHT - 1) {
 					(*grid)[posY][posX] = '*';
@@ -135,7 +139,7 @@ int main() {
 	Board board;
 
 	Triangle* triangle = new Triangle(board, 20, 10, 5);
-	Square* square = new Square(board, 20, 20, 5);
+	Square* square = new Square(board, 15, 2, 11);
 
 	board.addFigure(triangle);
 	board.addFigure(square);
