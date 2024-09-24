@@ -89,9 +89,8 @@ public:
 					(*grid)[posY][posX] = '*';
 				}
 
-				else {
-					(*grid)[posY][posX] = '*';
-					(*grid)[posY][HEIGHT - 1] = '*';
+				else if (j == 0 || j == HEIGHT - 1) {
+					(*grid)[posY][posX] = '*'; // well previous method was absolutely stupid i apologize to every square i tried to create with it 
 				}
 			}
 		}
