@@ -26,8 +26,12 @@ public:
 
 	virtual void draw() = 0;
 
-	string getType() {
-		return TYPE;
+	virtual void getType() {
+		cout << TYPE;
+	}
+
+	virtual void getCoordinates() {
+		cout << "x: " << X << " y: " << Y << endl;
 	}
 };
 
@@ -63,7 +67,9 @@ struct Board {
 
 	void list() {
 		for (auto& figure : figures) {
-			cout << figure->getType() << "  " << endl;
+			figure->getType();
+			cout << " with coordinates ";
+			figure->getCoordinates();
 		}
 	}
 };
