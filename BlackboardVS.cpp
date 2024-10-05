@@ -229,18 +229,34 @@ public:
 		else if (command == "help") {
 			help.help();
 		}
-		else if (command == "exit") {
-			//break;
+		else {
+			cout << "unknown command! please try again" << endl;
 		}
+	}
+
+	void deletionWarning() {
+		cout << "you are going to loose your current board! you sure you want to do that? (y/n): ";
 	}
 
 	void start() {
 		string userInput;
-		bool flag = true;
-		while (flag) {
+		while (true) {
 			cout << "Enter your command (or 'help' to see all commands): ";
 
 			getline(cin, userInput);
+
+			if (userInput == "exit") {
+				deletionWarning();
+				getline(cin, userInput);
+
+				if (userInput == "y" || userInput == "Y") {
+					break;
+				}
+				else {
+					continue;
+				}
+			}
+
 			commands(userInput);
 		}
 	}
