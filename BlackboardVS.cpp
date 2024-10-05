@@ -106,6 +106,13 @@ struct Board {
 			figures.pop_back();
 		}
 	}
+
+	void deleteFigures() {
+		while (!figures.empty()) {
+			figures.pop_back();
+		}
+		cout << endl << "all figures were deleted!!" << endl << endl;
+	}
 };
 
 class Square: public Figure {
@@ -252,6 +259,10 @@ public:
 		else if (command == "undo") {
 			board.undo();
 		}
+		else if (command == "clear") {
+			board.deleteFigures();
+			board.clear();
+		}
 		else if (command == "help") {
 			help.help();
 		}
@@ -297,8 +308,16 @@ public:
 		}
 	}
 
-	void deletionWarning() {
+	bool deletionWarning() {
+		string input;
 		cout << "you are going to loose your current board! you sure you want to do that? (y/n): ";
+
+		if (input == "y" || input == "Y") {
+			return true;
+		}
+		else {
+			return false;
+		}
 	}
 
 	void start() {
@@ -319,7 +338,6 @@ public:
 					continue;
 				}
 			}
-
 			commands(userInput);
 		}
 	}
