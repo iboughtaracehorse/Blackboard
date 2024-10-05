@@ -113,6 +113,45 @@ struct Board {
 		}
 		cout << endl << "all figures were deleted!!" << endl << endl;
 	}
+
+	bool isEmpty() {
+		return figures.empty();
+	}
+};
+
+class Line : public Figure {
+
+	vector<vector<char>>* grid;
+	int X2;
+	int Y2;
+
+public:
+	Line(Board& board, int x, int y, int x2, int y2) : Figure(board) {
+		X = x; Y = y; X2 = x2; Y2 = y2; TYPE = "line", grid = &board.getGrid();;
+	};
+
+
+
+	void draw() {
+		if (Y == Y2) {
+			int startX = min(X, X2);
+			int endX = max(X, X2);
+			for (int i = startX; i <= endX; ++i) {
+				if (i >= 0 && i < BOARD_WIDTH && Y >= 0 && Y < BOARD_HEIGHT) {
+					(*grid)[Y][i] = '*';
+				}
+			}
+		}
+		else if (X == X2) {
+			int startY = min(Y, Y2);
+			int endY = max(Y, Y2);
+			for (int i = startY; i <= endY; ++i) {
+				if (X >= 0 && X < BOARD_WIDTH && i >= 0 && i < BOARD_HEIGHT) {
+					(*grid)[i][X] = '*';
+				}
+			}
+		}
+	}
 };
 
 class Square: public Figure {
@@ -276,6 +315,7 @@ public:
 
 	void addFigure() {
 		cout << "so you want to add a new figure... great! here are your options: " << endl;
+		cout << "0. line" << endl;
 		cout << "1. triangle" << endl;
 		cout << "2. square" << endl;
 
@@ -283,9 +323,11 @@ public:
 		cout << "enter the number corresponding to the figure you want to add: ";
 		cin >> userInput;
 
-		int x;
-		int y;
-		int height;
+		int x = 0;
+		int y = 0;
+		int height = 0;
+		int x2 = 0;
+		int y2 = 0;
 
 		cout << "enter x--position: ";
 		cin >> x;
@@ -293,15 +335,34 @@ public:
 		cout << "enter y--position: ";
 		cin >> y;
 
-		cout << "enter height (works as diametr for circle): ";
-		cin >> height;
+		if (userInput == 0) {
+			cout << "enter end x--position: ";
+			cin >> x2;
 
-		if (userInput == 1) {
+			cout << "enter end y--position: ";
+			cin >> y2;
+
+			if (x == x2 || y == y2) {
+				Line* line = new Line(board, x, y, x2, y2);
+				board.addFigure(line);
+				cout << "new line was added!" << endl;
+			}
+			else {
+				cout << "only horizontal or vertical lines are available!!" << endl;
+			}
+		}
+		else if (userInput == 1) {
+			cout << "enter height (works as diametr for circle): ";
+			cin >> height;
+
 			Triangle* triangle = new Triangle(board, x, y, height);
 			board.addFigure(triangle);
 			cout << "new triangle was added!" << endl;
 		}
 		else if (userInput == 2) {
+			cout << "enter height (works as diametr for circle): ";
+			cin >> height;
+
 			Square* square = new Square(board, x, y, height);
 			board.addFigure(square);
 			cout << "new square was added!" << endl;
@@ -331,14 +392,19 @@ public:
 			getline(cin, userInput);
 
 			if (userInput == "exit") {
-				deletionWarning();
-				getline(cin, userInput);
-
-				if (userInput == "y" || userInput == "Y") {
+				if (board.isEmpty()) {
 					break;
 				}
 				else {
-					continue;
+					deletionWarning();
+					getline(cin, userInput);
+
+					if (userInput == "y" || userInput == "Y") {
+						break;
+					}
+					else {
+						continue;
+					}
 				}
 			}
 			commands(userInput);
