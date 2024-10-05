@@ -246,7 +246,7 @@ class InputParser {
 
 public:
 
-	InputParser(Board& board) : board(board) { cout << "welcome to the blackboard!!" << endl; };
+	InputParser(Board& board) : board(board) { cout << "welcome to the BLACKBOARD!!" << endl << endl; };
 
 	void commands(string command) {
 		if (command == "print") {
@@ -326,7 +326,7 @@ public:
 	void start() {
 		string userInput;
 		while (true) {
-			cout << "Enter your command (or 'help' to see all commands): ";
+			cout << "enter your command (or 'help' to see all commands): ";
 
 			getline(cin, userInput);
 
