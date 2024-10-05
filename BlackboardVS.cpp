@@ -322,6 +322,7 @@ public:
 		int userInput;
 		cout << "enter the number corresponding to the figure you want to add: ";
 		cin >> userInput;
+		cin.ignore();
 
 		int x = 0;
 		int y = 0;
@@ -341,6 +342,8 @@ public:
 
 			cout << "enter end y--position: ";
 			cin >> y2;
+			cin.ignore();
+
 
 			if (x == x2 || y == y2) {
 				Line* line = new Line(board, x, y, x2, y2);
@@ -354,6 +357,8 @@ public:
 		else if (userInput == 1) {
 			cout << "enter height (works as diametr for circle): ";
 			cin >> height;
+			cin.ignore();
+
 
 			Triangle* triangle = new Triangle(board, x, y, height);
 			board.addFigure(triangle);
@@ -362,6 +367,8 @@ public:
 		else if (userInput == 2) {
 			cout << "enter height (works as diametr for circle): ";
 			cin >> height;
+			cin.ignore();
+
 
 			Square* square = new Square(board, x, y, height);
 			board.addFigure(square);
