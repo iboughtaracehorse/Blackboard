@@ -224,6 +224,7 @@ public:
 
 	void commands(string command) {
 		if (command == "print") {
+			board.drawFigures();
 			board.print();
 		}
 		else if (command == "list") {
