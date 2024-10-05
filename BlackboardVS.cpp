@@ -43,12 +43,27 @@ struct Board {
 	Board() : grid(BOARD_HEIGHT, vector<char>(BOARD_WIDTH, ' ')) {}
 
 	void print() {
-		for (auto& row : grid) {
-			for (char c : row) {
-				cout << c;
-			}
-			cout << "\n";
+
+		cout << "^";  
+		for (int i = 0; i < BOARD_WIDTH; ++i) {
+			cout << "-";
 		}
+		cout << "^" << endl;
+
+		for (int i = 0; i < BOARD_HEIGHT; ++i) {
+			cout << "|";  
+			for (int j = 0; j < BOARD_WIDTH; ++j) {
+				cout << grid[i][j];
+			}
+			cout << "|" << endl; 
+		}
+
+		cout << "^";
+		for (int i = 0; i < BOARD_WIDTH; ++i) {
+			cout << "-";
+		}
+		cout << "^" << endl;
+
 	}
 
 	vector<vector<char>>& getGrid() {
@@ -195,6 +210,39 @@ public:
 	}
 };
 
+class InputParser {
+	Board* board;
+	Help help;
+
+	InputParser() { cout << "Welcome to the blackboard!!"; };
+
+	void commands(string command) {
+		if (command == "print") {
+			// call function
+		}
+		else if (command == "list") {
+			// yeah
+		}
+		else if (command == "help") {
+			help.help();
+		}
+		else if (command == "exit") {
+			//break;
+		}
+	}
+
+	void start() {
+		string userInput;
+		bool flag = true;
+		while (flag) {
+			cout << "Enter your command (or 'help' to see all commands): ";
+
+			getline(cin, userInput);
+			commands(userInput);
+		}
+	}
+};
+
 
 int main() {
 
@@ -202,21 +250,12 @@ int main() {
 	Help help;
 
 	Triangle* triangle = new Triangle(board, 20, 10, 5);
-	Square* square = new Square(board, 15, 2, 11);
+	Square* square = new Square(board, 15, 0, 11);
 
-	board.addFigure(triangle);
-	board.addFigure(square);
-
-	board.drawFigures();
-	
-	//board.print();
-	
-	board.list();
-
-	help.help();
-
+	//InputParser parser;
 
 	delete triangle;
+	delete square;
 
 	return 0;
 
