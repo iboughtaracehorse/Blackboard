@@ -81,6 +81,9 @@ struct Board {
 	}
 
 	void list() {
+		if (figures.empty()) {
+			cout << endl << "oops! your board must be empty! try 'add' to add new figures!" << endl << endl;
+		}
 		for (auto& figure : figures) {
 			figure->getType();
 			cout << " with coordinates ";
@@ -217,20 +220,60 @@ class InputParser {
 
 public:
 
-	InputParser(Board& board) : board(board) { cout << "Welcome to the blackboard!!" << endl; };
+	InputParser(Board& board) : board(board) { cout << "welcome to the blackboard!!" << endl; };
 
 	void commands(string command) {
 		if (command == "print") {
-			// call function
+			board.print();
 		}
 		else if (command == "list") {
-			// yeah
+			board.list();
+		}
+		else if (command == "add") {
+			addFigure();
 		}
 		else if (command == "help") {
 			help.help();
 		}
 		else {
 			cout << "unknown command! please try again" << endl;
+		}
+	}
+
+	void addFigure() {
+		cout << "so you want to add a new figure... great! here are your options: " << endl;
+		cout << "1. triangle" << endl;
+		cout << "2. square" << endl;
+
+		int userInput;
+		cout << "enter the number corresponding to the figure you want to add: ";
+		cin >> userInput;
+
+		int x;
+		int y;
+		int height;
+
+		cout << "enter x--position: ";
+		cin >> x;
+
+		cout << "enter y--position: ";
+		cin >> y;
+
+		cout << "enter height (works as diametr for circle): ";
+		cin >> height;
+
+		if (userInput == 1) {
+			Triangle* triangle = new Triangle(board, x, y, height);
+			board.addFigure(triangle);
+			cout << "new triangle was added!" << endl;
+		}
+		else if (userInput == 2) {
+			Square* square = new Square(board, x, y, height);
+			board.addFigure(square);
+			cout << "new square was added!" << endl;
+		}
+		else {
+			cout << "we don't carry THIS here..." << endl;
 		}
 	}
 
@@ -268,14 +311,8 @@ int main() {
 	Board board;
 	Help help;
 
-	Triangle* triangle = new Triangle(board, 20, 10, 5);
-	Square* square = new Square(board, 15, 0, 11);
-
 	InputParser parser(board);
 	parser.start();
-		
-	delete triangle;
-	delete square;
 
 	return 0;
 
