@@ -211,10 +211,13 @@ public:
 };
 
 class InputParser {
-	Board* board;
+
+	Board& board;
 	Help help;
 
-	InputParser() { cout << "Welcome to the blackboard!!"; };
+public:
+
+	InputParser(Board& board) : board(board) { cout << "Welcome to the blackboard!!" << endl; };
 
 	void commands(string command) {
 		if (command == "print") {
@@ -252,8 +255,9 @@ int main() {
 	Triangle* triangle = new Triangle(board, 20, 10, 5);
 	Square* square = new Square(board, 15, 0, 11);
 
-	//InputParser parser;
-
+	InputParser parser(board);
+	parser.start();
+		
 	delete triangle;
 	delete square;
 
