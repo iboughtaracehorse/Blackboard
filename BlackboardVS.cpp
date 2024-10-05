@@ -376,6 +376,8 @@ public:
 		string input;
 		cout << "you are going to loose your current board! you sure you want to do that? (y/n): ";
 
+		getline(cin, input);
+
 		if (input == "y" || input == "Y") {
 			return true;
 		}
@@ -395,16 +397,11 @@ public:
 				if (board.isEmpty()) {
 					break;
 				}
+				else if (deletionWarning()) {
+					break;
+				}
 				else {
-					deletionWarning();
-					getline(cin, userInput);
-
-					if (userInput == "y" || userInput == "Y") {
-						break;
-					}
-					else {
-						continue;
-					}
+					continue;
 				}
 			}
 			commands(userInput);
