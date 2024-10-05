@@ -42,6 +42,12 @@ struct Board {
 
 	Board() : grid(BOARD_HEIGHT, vector<char>(BOARD_WIDTH, ' ')) {}
 
+	void clear() {
+		for (int i = 0; i < BOARD_HEIGHT; ++i) {
+			fill(grid[i].begin(), grid[i].end(), ' ');
+		}
+	}
+
 	void print() {
 
 		cout << "^";  
@@ -75,6 +81,7 @@ struct Board {
 	}
 
 	void drawFigures() {
+		clear();
 		for (Figure* figure : figures) {
 			figure->draw();
 		}
@@ -89,6 +96,10 @@ struct Board {
 			cout << " with coordinates ";
 			figure->getCoordinates();
 		}
+	}
+
+	void undo() {
+		figures.pop_back();
 	}
 };
 
@@ -232,6 +243,9 @@ public:
 		}
 		else if (command == "add") {
 			addFigure();
+		}
+		else if (command == "undo") {
+			board.undo();
 		}
 		else if (command == "help") {
 			help.help();
