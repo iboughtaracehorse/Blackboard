@@ -99,7 +99,12 @@ struct Board {
 	}
 
 	void undo() {
-		figures.pop_back();
+		if (figures.empty()) {
+			cout << "no figures on the board!" << endl;
+		}
+		else {
+			figures.pop_back();
+		}
 	}
 };
 
