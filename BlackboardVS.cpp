@@ -186,7 +186,7 @@ struct Board {
 		cout << "saved successfully!!" << endl;
 	}
 
-	void printIntoFile(ifstream& file) {
+	void printIntoFile(ofstream& file) { //i am stupid
 		for (auto figure : figures) {
 			file << figure->getType() << " ";
 			file << figure->getCoordinates() << " ";
