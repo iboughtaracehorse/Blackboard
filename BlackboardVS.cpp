@@ -48,27 +48,27 @@ struct Board {
 		}
 	}
 
-	void print() {
+	void print(ostream& target) {
 
-		cout << "^";  
+		target << "^";
 		for (int i = 0; i < BOARD_WIDTH; ++i) {
-			cout << "-";
+			target << "-";
 		}
-		cout << "^" << endl;
+		target << "^" << endl;
 
 		for (int i = 0; i < BOARD_HEIGHT; ++i) {
-			cout << "|";  
+			target << "|";
 			for (int j = 0; j < BOARD_WIDTH; ++j) {
-				cout << grid[i][j];
+				target << grid[i][j];
 			}
-			cout << "|" << endl; 
+			target << "|" << endl;
 		}
 
-		cout << "^";
+		target << "^";
 		for (int i = 0; i < BOARD_WIDTH; ++i) {
-			cout << "-";
+			target << "-";
 		}
-		cout << "^" << endl;
+		target << "^" << endl;
 
 	}
 
@@ -116,6 +116,30 @@ struct Board {
 
 	bool isEmpty() {
 		return figures.empty();
+	}
+
+	void save() {
+		string directory;
+		string filename;
+		ofstream file;
+
+		cout << "enter a full directory (with filename) to save the file in (ot 'this' to save in the current directory): ";
+		getline(cin, directory);
+
+		if (directory == "this") {
+			cout << "how do you want to call your file?: ";
+			getline(cin, filename);
+
+			ofstream file(filename);
+		}
+		else {
+			ofstream file(directory);
+		}
+
+		print(file);
+		file.close();
+
+			cout << "saved successfully!!" << endl;
 	}
 };
 
@@ -290,7 +314,7 @@ public:
 	void commands(string command) {
 		if (command == "print") {
 			board.drawFigures();
-			board.print();
+			board.print(cout);
 		}
 		else if (command == "list") {
 			board.list();
@@ -304,6 +328,9 @@ public:
 		else if (command == "clear") {
 			board.deleteFigures();
 			board.clear();
+		}
+		else if (command == "save") {
+			board.save();
 		}
 		else if (command == "help") {
 			help.help();
