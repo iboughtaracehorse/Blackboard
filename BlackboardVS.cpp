@@ -227,7 +227,6 @@ struct Board {
 
 			if (file.is_open()) {
 				readFromFile(file);
-				drawFigures();
 				file.close();
 			}
 			else {
@@ -251,20 +250,24 @@ struct Board {
 
 			if (type == "line") {
 				int x, y, x2, y2;
+				ss >> x >> y >> x2 >> y2; // bro finally took his meds
 				Line* line = new Line(*this, x, y, x2, y2);
 				addFigure(line);
 			}
 			else if (type == "triangle") {
 				int x, y, height;
+				ss >> x >> y >> height;
 				Triangle* triangle = new Triangle(*this, x, y, height);
 				addFigure(triangle);
 			}
-			if (type == "square") {
+			else if (type == "square") {
 				int x, y, height;
+				ss >> x >> y >> height;
 				Square* square = new Square(*this, x, y, height);
 				addFigure(square);
 			}
 		}
+		drawFigures();
 	}
 };
 
