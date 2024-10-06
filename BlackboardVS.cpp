@@ -161,6 +161,8 @@ struct Board {
 			ifstream file(filename);
 
 			if (file.is_open()) {
+				readFromFile(file);
+
 				file.close();
 			}
 			else {
@@ -174,6 +176,7 @@ struct Board {
 			ifstream file(directory);
 
 			if (file.is_open()) {
+				readFromFile(file);
 				file.close();
 			}
 			else {
@@ -182,6 +185,17 @@ struct Board {
 			}
 		}
 
+	}
+
+	void readFromFile(ifstream& file) {
+		figures.clear();
+		clear();
+
+		string currentLine;
+
+		while (getline(file, currentLine)) {
+			cout << currentLine << endl;
+		}
 	}
 };
 
@@ -373,6 +387,9 @@ public:
 		}
 		else if (command == "save") {
 			board.save();
+		}
+		else if (command == "load") {
+			board.load();
 		}
 		else if (command == "help") {
 			help.help();
