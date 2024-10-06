@@ -29,7 +29,7 @@ public:
 	virtual void getTypeStr() {
 		cout << TYPE;
 	}
-	
+
 	virtual void getCoordinatesStr() {
 		cout << "x: " << X << " y: " << Y << endl;
 	}
@@ -38,119 +38,13 @@ public:
 		return TYPE;
 	}
 	virtual int getX() {
-		return X ;
+		return X;
 	}
 	virtual int getY() {
-		return Y ;
+		return Y;
 	}
 	virtual int getHeight() {
 		return HEIGHT;
-	}
-};
-
-class Line : public Figure {
-
-	vector<vector<char>>* grid;
-	int X2;
-	int Y2;
-
-public:
-	Line(Board& board, int x, int y, int x2, int y2) : Figure(board) {
-		X = x; Y = y; X2 = x2; Y2 = y2; TYPE = "line", grid = &board.getGrid();;
-	};
-
-
-
-	void draw() {
-		if (Y == Y2) {
-			int startX = min(X, X2);
-			int endX = max(X, X2);
-			for (int i = startX; i <= endX; ++i) {
-				if (i >= 0 && i < BOARD_WIDTH && Y >= 0 && Y < BOARD_HEIGHT) {
-					(*grid)[Y][i] = '*';
-				}
-			}
-		}
-		else if (X == X2) {
-			int startY = min(Y, Y2);
-			int endY = max(Y, Y2);
-			for (int i = startY; i <= endY; ++i) {
-				if (X >= 0 && X < BOARD_WIDTH && i >= 0 && i < BOARD_HEIGHT) {
-					(*grid)[i][X] = '*';
-				}
-			}
-		}
-	}
-};
-
-class Square : public Figure {
-
-	Board& board;
-
-public:
-	Square(Board& board, int x, int y, int height) : Figure(board), board(board) {
-		X = x; Y = y; HEIGHT = height, TYPE = "square";
-	};
-
-	void draw() {
-		if (HEIGHT <= 0) return;
-
-		vector<vector<char>> grid = board.getGrid();
-
-		for (int i = 0; i < HEIGHT; ++i) {
-			int posY = Y + i;
-
-			if (posY < 0 || posY >= BOARD_HEIGHT) continue;
-
-			for (int j = 0; j < HEIGHT; ++j) {
-				int posX = X + j;
-
-				if (posX < 0 || posX >= BOARD_WIDTH) continue;
-
-				if (i == 0 || i == HEIGHT - 1) {
-					grid[posY][posX] = '*';
-				}
-
-				else if (j == 0 || j == HEIGHT - 1) {
-					grid[posY][posX] = '*'; // well previous method was absolutely stupid i apologize to every square i tried to create with it 
-				}
-			}
-		}
-	}
-};
-
-class Triangle : public Figure {
-private:
-	Board& board;
-
-public:
-
-	Triangle(Board& board, int x, int y, int height) : Figure(board), board(board) {
-		 X = x; Y = y; HEIGHT = height, TYPE = "triangle";
-	};
-
-	void draw() {
-		if (HEIGHT <= 0) return;
-
-		vector<vector<char>> grid = board.getGrid();
-
-		for (int i = 0; i < HEIGHT; ++i) {
-			int leftMost = X - i;
-			int rightMost = X + i;
-			int posY = Y + i;
-			if (posY < BOARD_HEIGHT) {
-				if (leftMost >= 0 && leftMost < BOARD_WIDTH)
-					grid[posY][leftMost] = '*';
-				if (rightMost >= 0 && rightMost < BOARD_WIDTH && leftMost != rightMost)
-					grid[posY][rightMost] = '*';
-			}
-		}
-		for (int j = 0; j < 2 * HEIGHT - 1; ++j) {
-			int baseX = X - HEIGHT + 1 + j;
-			int baseY = Y + HEIGHT - 1;
-			if (baseX >= 0 && baseX < BOARD_WIDTH && baseY < BOARD_HEIGHT)
-				grid[baseY][baseX] = '*';
-		}
 	}
 };
 
@@ -159,16 +53,7 @@ struct Board {
 	vector<vector<char>> grid;
 	vector<Figure*> figures;
 
-public:
-
 	Board() : grid(BOARD_HEIGHT, vector<char>(BOARD_WIDTH, ' ')) {}
-
-	void getGrid(int x, int y) {
-		if (x >= 0 && x < BOARD_WIDTH && y >= 0 && y < BOARD_HEIGHT) {
-			grid[y][x] = '';
-		}
-	}
-
 
 	void clear() {
 		for (int i = 0; i < BOARD_HEIGHT; ++i) {
@@ -296,9 +181,9 @@ public:
 		if (file.is_open()) {
 			for (auto figure : figures) {
 				file << figure->getType() << " "
-					 << figure->getX() << " "
-					 << figure->getY() << " "
-					 << figure->getHeight() << endl;
+					<< figure->getX() << " "
+					<< figure->getY() << " "
+					<< figure->getHeight() << endl;
 			}
 		}
 
@@ -312,7 +197,7 @@ public:
 	}
 
 
-	void load() {
+	/*void load() {
 		string directory;
 		string filename;
 
@@ -342,6 +227,7 @@ public:
 
 			if (file.is_open()) {
 				readFromFile(file);
+				drawFigures();
 				file.close();
 			}
 			else {
@@ -365,28 +251,122 @@ public:
 
 			if (type == "line") {
 				int x, y, x2, y2;
-				ss >> x >> y >> x2 >> y2; 
 				Line* line = new Line(*this, x, y, x2, y2);
 				addFigure(line);
 			}
 			else if (type == "triangle") {
 				int x, y, height;
-				ss >> x >> y >> height;
 				Triangle* triangle = new Triangle(*this, x, y, height);
 				addFigure(triangle);
 			}
-			else if (type == "square") {
+			if (type == "square") {
 				int x, y, height;
-				ss >> x >> y >> height;
 				Square* square = new Square(*this, x, y, height);
 				addFigure(square);
 			}
 		}
-		drawFigures();
+	}*/
+};
+
+class Line : public Figure {
+
+	vector<vector<char>>* grid;
+	int X2;
+	int Y2;
+
+public:
+	Line(Board& board, int x, int y, int x2, int y2) : Figure(board) {
+		X = x; Y = y; X2 = x2; Y2 = y2; TYPE = "line", grid = &board.getGrid();;
+	};
+
+
+
+	void draw() {
+		if (Y == Y2) {
+			int startX = min(X, X2);
+			int endX = max(X, X2);
+			for (int i = startX; i <= endX; ++i) {
+				if (i >= 0 && i < BOARD_WIDTH && Y >= 0 && Y < BOARD_HEIGHT) {
+					(*grid)[Y][i] = '*';
+				}
+			}
+		}
+		else if (X == X2) {
+			int startY = min(Y, Y2);
+			int endY = max(Y, Y2);
+			for (int i = startY; i <= endY; ++i) {
+				if (X >= 0 && X < BOARD_WIDTH && i >= 0 && i < BOARD_HEIGHT) {
+					(*grid)[i][X] = '*';
+				}
+			}
+		}
 	}
 };
 
+class Square : public Figure {
 
+	vector<vector<char>>* grid;
+
+public:
+	Square(Board& board, int x, int y, int height) : Figure(board) {
+		X = x; Y = y; HEIGHT = height, TYPE = "square", grid = &board.getGrid();;
+	};
+
+	void draw() {
+		if (HEIGHT <= 0) return;
+		for (int i = 0; i < HEIGHT; ++i) {
+			int posY = Y + i;
+
+			if (posY < 0 || posY >= BOARD_HEIGHT) continue;
+
+			for (int j = 0; j < HEIGHT; ++j) {
+				int posX = X + j;
+
+				if (posX < 0 || posX >= BOARD_WIDTH) continue;
+
+				if (i == 0 || i == HEIGHT - 1) {
+					(*grid)[posY][posX] = '*';
+				}
+
+				else if (j == 0 || j == HEIGHT - 1) {
+					(*grid)[posY][posX] = '*'; // well previous method was absolutely stupid i apologize to every square i tried to create with it 
+				}
+			}
+		}
+	}
+};
+
+class Triangle : public Figure {
+
+	vector<vector<char>>* grid;
+
+public:
+
+	Triangle(Board& board, int x, int y, int height) : Figure(board) {
+		X = x; Y = y; HEIGHT = height, TYPE = "triangle"; grid = &board.getGrid();
+	};
+
+	void draw() {
+		if (HEIGHT <= 0) return;
+		for (int i = 0; i < HEIGHT; ++i) {
+			int leftMost = X - i;
+			int rightMost = X + i;
+			int posY = Y + i;
+			if (posY < BOARD_HEIGHT) {
+				if (leftMost >= 0 && leftMost < BOARD_WIDTH)
+					(*grid)[posY][leftMost] = '*';
+				if (rightMost >= 0 && rightMost < BOARD_WIDTH && leftMost != rightMost)
+					(*grid)[posY][rightMost] = '*';
+			}
+		}
+		for (int j = 0; j < 2 * HEIGHT - 1; ++j) {
+			int baseX = X - HEIGHT + 1 + j;
+			int baseY = Y + HEIGHT - 1;
+			if (baseX >= 0 && baseX < BOARD_WIDTH && baseY < BOARD_HEIGHT)
+				(*grid)[baseY][baseX] = '*';
+		}
+	}
+};
 
 class Help {
 
@@ -429,20 +409,20 @@ public:
 		cout << "2. list" << endl;
 		cout << "   -- description: lists all added figures in text format with coordinates" << endl;
 		cout << endl;
-		
+
 		cout << "3. undo" << endl;
 		cout << "   -- description: deletes the last figure from the board" << endl;
 		cout << endl;
-		
+
 		cout << "4. clear" << endl;
 		cout << "   -- description: clears the board" << endl;
 		cout << endl;
-		
+
 		cout << "5. exit" << endl;
 		cout << "   -- description: exit the program, yu will lost all the progress" << endl;
 		cout << endl;
-		
-		
+
+
 		cout << "!!! ANYTHING ELSE IS NOT SUPPORTED !!!" << endl;
 	}
 };
@@ -478,7 +458,7 @@ public:
 			board.save();
 		}
 		else if (command == "load") {
-			board.load();
+			//board.load();
 		}
 		else if (command == "help") {
 			help.help();
@@ -603,6 +583,3 @@ int main() {
 	return 0;
 
 };
-
-
-
