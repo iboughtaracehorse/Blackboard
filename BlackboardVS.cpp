@@ -382,6 +382,10 @@ public:
 
 		int diameter = HEIGHT;
 		int radius = diameter / 2;
+
+		for (int i = 0; i <= radius * 2; ++i) {
+			cout << "*";
+		}
 	}
 
 };
@@ -501,6 +505,7 @@ public:
 		cout << "0. line" << endl;
 		cout << "1. triangle" << endl;
 		cout << "2. square" << endl;
+		cout << "3. circle" << endl;
 
 		int userInput;
 		cout << "enter the number corresponding to the figure you want to add: ";
@@ -526,7 +531,6 @@ public:
 			cout << "enter end y--position: ";
 			cin >> y2;
 			cin.ignore();
-
 
 			if (x == x2 || y == y2) {
 				Line* line = new Line(board, x, y, x2, y2);
@@ -556,6 +560,17 @@ public:
 			Square* square = new Square(board, x, y, height);
 			board.addFigure(square);
 			cout << "new square was added!" << endl;
+		}
+		
+		else if (userInput == 3) {
+			cout << "enter diameter: ";
+			cin >> height;
+			cin.ignore();
+
+
+			Circle* circle = new Circle(board, x, y, height);
+			board.addFigure(circle);
+			cout << "new circle was added!" << endl;
 		}
 		else {
 			cout << "we don't carry THIS here..." << endl;
