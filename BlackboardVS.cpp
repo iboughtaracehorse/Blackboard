@@ -383,8 +383,18 @@ public:
 		int diameter = HEIGHT;
 		int radius = diameter / 2;
 
-		for (int i = 0; i <= radius * 2; ++i) {
-			cout << "*";
+		for (int i = 0; i <= diameter; ++i) {
+			for (int j = 0; j <= diameter; j++) {
+				double centreDistance = sqrt((i - radius) * (i - radius) + (j - radius) * (j - radius));
+
+				if (centreDistance >= radius - 0.5 && centreDistance <= radius + 0.5) {
+					int posX = X + j;
+					int posY = Y + i;
+					if (posX >= 0 && posX < BOARD_WIDTH && posY < BOARD_HEIGHT) {
+						(*grid)[posX][posY] = '*';
+					}
+				}
+			}
 		}
 	}
 
@@ -542,7 +552,7 @@ public:
 			}
 		}
 		else if (userInput == 1) {
-			cout << "enter height (works as diametr for circle): ";
+			cout << "enter height: ";
 			cin >> height;
 			cin.ignore();
 
@@ -552,7 +562,7 @@ public:
 			cout << "new triangle was added!" << endl;
 		}
 		else if (userInput == 2) {
-			cout << "enter height (works as diametr for circle): ";
+			cout << "enter height: ";
 			cin >> height;
 			cin.ignore();
 
