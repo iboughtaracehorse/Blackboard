@@ -85,15 +85,18 @@ public:
 
 class Square : public Figure {
 
-	vector<vector<char>>* grid;
+	Board& board;
 
 public:
-	Square(Board& board, int x, int y, int height) : Figure(board) {
-		X = x; Y = y; HEIGHT = height, TYPE = "square", grid = &board.getGrid();;
+	Square(Board& board, int x, int y, int height) : Figure(board), board(board) {
+		X = x; Y = y; HEIGHT = height, TYPE = "square";
 	};
 
 	void draw() {
 		if (HEIGHT <= 0) return;
+
+		vector<vector<char>> grid = board.getGrid();
+
 		for (int i = 0; i < HEIGHT; ++i) {
 			int posY = Y + i;
 
@@ -105,11 +108,11 @@ public:
 				if (posX < 0 || posX >= BOARD_WIDTH) continue;
 
 				if (i == 0 || i == HEIGHT - 1) {
-					(*grid)[posY][posX] = '*';
+					grid[posY][posX] = '*';
 				}
 
 				else if (j == 0 || j == HEIGHT - 1) {
-					(*grid)[posY][posX] = '*'; // well previous method was absolutely stupid i apologize to every square i tried to create with it 
+					grid[posY][posX] = '*'; // well previous method was absolutely stupid i apologize to every square i tried to create with it 
 				}
 			}
 		}
