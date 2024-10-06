@@ -117,33 +117,36 @@ public:
 };
 
 class Triangle : public Figure {
-
-	vector<vector<char>>* grid;
+private:
+	Board& board;
 
 public:
 
-	Triangle(Board& board, int x, int y, int height) : Figure(board) {
-		X = x; Y = y; HEIGHT = height, TYPE = "triangle"; grid = &board.getGrid();
+	Triangle(Board& board, int x, int y, int height) : Figure(board), board(board) {
+		 X = x; Y = y; HEIGHT = height, TYPE = "triangle";
 	};
 
 	void draw() {
 		if (HEIGHT <= 0) return;
+
+		vector<vector<char>> grid = board.getGrid();
+
 		for (int i = 0; i < HEIGHT; ++i) {
 			int leftMost = X - i;
 			int rightMost = X + i;
 			int posY = Y + i;
 			if (posY < BOARD_HEIGHT) {
 				if (leftMost >= 0 && leftMost < BOARD_WIDTH)
-					(*grid)[posY][leftMost] = '*';
+					grid[posY][leftMost] = '*';
 				if (rightMost >= 0 && rightMost < BOARD_WIDTH && leftMost != rightMost)
-					(*grid)[posY][rightMost] = '*';
+					grid[posY][rightMost] = '*';
 			}
 		}
 		for (int j = 0; j < 2 * HEIGHT - 1; ++j) {
 			int baseX = X - HEIGHT + 1 + j;
 			int baseY = Y + HEIGHT - 1;
 			if (baseX >= 0 && baseX < BOARD_WIDTH && baseY < BOARD_HEIGHT)
-				(*grid)[baseY][baseX] = '*';
+				grid[baseY][baseX] = '*';
 		}
 	}
 };
@@ -157,8 +160,10 @@ public:
 
 	Board() : grid(BOARD_HEIGHT, vector<char>(BOARD_WIDTH, ' ')) {}
 
-	vector<vector<char>>& getGrid() {
-		return grid;
+	void getGrid(int x, int y) {
+		if (x >= 0 && x < BOARD_WIDTH && y >= 0 && y < BOARD_HEIGHT) {
+			grid[y][x] = '';
+		}
 	}
 
 
