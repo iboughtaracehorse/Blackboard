@@ -368,6 +368,24 @@ public:
 	}
 };
 
+class Circle : public Figure {
+
+	vector<vector<char>>* grid;
+
+public:
+	Circle(Board& board, int x, int y, int height) : Figure(board) {
+		X = x; Y = y; HEIGHT = height, TYPE = "circle", grid = &board.getGrid();;
+	};
+
+	void draw() {
+		if (HEIGHT <= 0) return;
+
+		int diameter = HEIGHT;
+		int radius = diameter / 2;
+	}
+
+};
+
 class Help {
 
 public:
