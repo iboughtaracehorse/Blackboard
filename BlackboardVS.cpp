@@ -26,12 +26,22 @@ public:
 
 	virtual void draw() = 0;
 
-	virtual void getType() {
+	virtual void getTypeStr() {
 		cout << TYPE;
 	}
-
-	virtual void getCoordinates() {
+	
+	virtual void getCoordinatesStr() {
 		cout << "x: " << X << " y: " << Y << endl;
+	}
+
+	virtual string getType() {
+		return TYPE;
+	}
+	virtual string getCoordinates() {
+		return X + " " + Y;
+	}
+	virtual int getHeight() {
+		return HEIGHT;
 	}
 };
 
@@ -92,9 +102,9 @@ struct Board {
 			cout << endl << "oops! your board must be empty! try 'add' to add new figures!" << endl << endl;
 		}
 		for (auto& figure : figures) {
-			figure->getType();
+			figure->getTypeStr();
 			cout << " with coordinates ";
-			figure->getCoordinates();
+			figure->getCoordinatesStr();
 		}
 	}
 
@@ -117,6 +127,35 @@ struct Board {
 	bool isEmpty() {
 		return figures.empty();
 	}
+
+	/*void save() {
+		string directory;
+		string filename;
+		ofstream file;
+
+		cout << "enter a full directory (with filename) to save the file in (ot 'this' to save in the current directory): ";
+		getline(cin, directory);
+
+		if (directory == "this") {
+			cout << "how do you want to call your file?: ";
+			getline(cin, filename);
+
+			file.open(filename);
+		}
+		else {
+			file.open(directory);
+		}
+
+		if (file.is_open()) {
+			print(file);
+			file.close();
+		}
+		else {
+			cout << "cannot open the file!!!!!!!!!!!" << endl;
+			return;
+		}
+			cout << "saved successfully!!" << endl;
+	}*/
 
 	void save() {
 		string directory;
@@ -144,7 +183,15 @@ struct Board {
 			cout << "cannot open the file!!!!!!!!!!!" << endl;
 			return;
 		}
-			cout << "saved successfully!!" << endl;
+		cout << "saved successfully!!" << endl;
+	}
+
+	void printIntoFile(ifstream& file) {
+		for (auto figure : figures) {
+			file << figure->getType() << " ";
+			file << figure->getCoordinates() << " ";
+			file << figure->getHeight() << endl;
+		}
 	}
 
 	void load() {
