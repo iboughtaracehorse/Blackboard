@@ -144,8 +144,44 @@ struct Board {
 			cout << "cannot open the file!!!!!!!!!!!" << endl;
 			return;
 		}
-	
 			cout << "saved successfully!!" << endl;
+	}
+
+	void load() {
+		string directory;
+		string filename;
+
+		cout << "enter a full directory (with filename) to load the file in (ot 'this' to load from the current directory): ";
+		getline(cin, directory);
+
+		if (directory == "this") {
+			cout << "enter filename you want to load: ";
+			getline(cin, filename);
+
+			ifstream file(filename);
+
+			if (file.is_open()) {
+				file.close();
+			}
+			else {
+				cout << "cannot open the file!!!!!!!!!!!" << endl;
+				return;
+			}
+
+		}
+		else {
+
+			ifstream file(directory);
+
+			if (file.is_open()) {
+				file.close();
+			}
+			else {
+				cout << "cannot open the file!!!!!!!!!!!" << endl;
+				return;
+			}
+		}
+
 	}
 };
 
