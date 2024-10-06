@@ -37,8 +37,11 @@ public:
 	virtual string getType() {
 		return TYPE;
 	}
-	virtual string getCoordinates() {
-		return X + " " + Y;
+	virtual int getX() {
+		return X ;
+	}
+	virtual int getY() {
+		return Y ;
 	}
 	virtual int getHeight() {
 		return HEIGHT;
@@ -176,23 +179,23 @@ struct Board {
 		}
 
 		if (file.is_open()) {
-			print(file);
-			file.close();
+			for (auto figure : figures) {
+				file << figure->getType() << " "
+					 << figure->getX() << " "
+					 << figure->getY() << " "
+					 << figure->getHeight() << endl;
+			}
 		}
+
 		else {
 			cout << "cannot open the file!!!!!!!!!!!" << endl;
 			return;
 		}
+
+		file.close();
 		cout << "saved successfully!!" << endl;
 	}
 
-	void printIntoFile(ofstream& file) { //i am stupid
-		for (auto figure : figures) {
-			file << figure->getType() << " ";
-			file << figure->getCoordinates() << " ";
-			file << figure->getHeight() << endl;
-		}
-	}
 
 	void load() {
 		string directory;
