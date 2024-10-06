@@ -227,6 +227,7 @@ struct Board {
 
 			if (file.is_open()) {
 				readFromFile(file);
+				drawFigures();
 				file.close();
 			}
 			else {
@@ -244,7 +245,25 @@ struct Board {
 		string currentLine;
 
 		while (getline(file, currentLine)) {
-			cout << currentLine << endl;
+			string type = "";
+			stringstream ss(currentLine);
+			ss >> type;
+
+			if (type == "line") {
+				int x, y, x2, y2;
+				Line* line = new Line(*this, x, y, x2, y2);
+				addFigure(line);
+			}
+			else if (type == "triangle") {
+				int x, y, height;
+				Triangle* triangle = new Triangle(*this, x, y, height);
+				addFigure(triangle);
+			}
+			if (type == "square") {
+				int x, y, height;
+				Square* square = new Square(*this, x, y, height);
+				addFigure(square);
+			}
 		}
 	}
 };
