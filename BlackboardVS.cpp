@@ -383,6 +383,12 @@ public:
 		cout << " | available shapes:" << endl;
 		cout << endl;
 
+		cout << "0. line" << endl;
+		cout << "   -- has four coordinates (x, y, x2, y2)" << endl;
+		cout << "   -- example: 5, 10, 9, 10" << endl;
+		cout << "     (draws a line starting at position (5,10) and ending at (9, 10). can draw only horizontal or vertical lines)" << endl;
+		cout << endl;
+		
 		cout << "1. triangle" << endl;
 		cout << "   -- has two coordinates (x, y) and height" << endl;
 		cout << "   -- example: 5, 10, 9" << endl;
@@ -417,8 +423,12 @@ public:
 		cout << "4. clear" << endl;
 		cout << "   -- description: clears the board" << endl;
 		cout << endl;
+		
+		cout << "5. save" << endl;
+		cout << "   -- description: saves the board to the chosen file" << endl;
+		cout << endl;
 
-		cout << "5. exit" << endl;
+		cout << "6. exit" << endl;
 		cout << "   -- description: exit the program, yu will lost all the progress" << endl;
 		cout << endl;
 
