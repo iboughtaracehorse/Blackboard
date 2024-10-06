@@ -130,15 +130,21 @@ struct Board {
 			cout << "how do you want to call your file?: ";
 			getline(cin, filename);
 
-			ofstream file(filename);
+			file.open(filename);
 		}
 		else {
-			ofstream file(directory);
+			file.open(directory);
 		}
 
-		print(file);
-		file.close();
-
+		if (file.is_open()) {
+			print(file);
+			file.close();
+		}
+		else {
+			cout << "cannot open the file!!!!!!!!!!!" << endl;
+			return;
+		}
+	
 			cout << "saved successfully!!" << endl;
 	}
 };
