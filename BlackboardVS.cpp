@@ -131,7 +131,7 @@ struct Board {
 		return figures.empty();
 	}
 
-	/*void save() {
+	void save() {
 		string directory;
 		string filename;
 		ofstream file;
@@ -158,9 +158,9 @@ struct Board {
 			return;
 		}
 			cout << "saved successfully!!" << endl;
-	}*/
+	}
 
-	void save() {
+	/*void save() {
 		string directory;
 		string filename;
 		ofstream file;
@@ -194,7 +194,7 @@ struct Board {
 
 		file.close();
 		cout << "saved successfully!!" << endl;
-	}
+	}*/
 
 
 	/*void load() {
@@ -432,6 +432,12 @@ public:
 		cout << "   -- example: 10, 20, 10" << endl;
 		cout << "     (draws a square starting at position (10,20) with a height of 10)" << endl;
 		cout << endl;
+		
+		cout << "3. circle" << endl;
+		cout << "   -- has two coordinates (x, y) and height (diameter)" << endl;
+		cout << "   -- example: 10, 20, 10" << endl;
+		cout << "     (draws a circle starting at position (10,20) with a diameter of 10)" << endl;
+		cout << endl;
 
 		cout << " | available commands:" << endl;
 		cout << endl;
@@ -500,6 +506,7 @@ public:
 			board.save();
 		}
 		else if (command == "load") {
+			cout << "NOT IMPLEMENTED" << endl;
 			//board.load();
 		}
 		else if (command == "help") {
