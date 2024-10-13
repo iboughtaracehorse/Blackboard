@@ -386,25 +386,46 @@ public:
 	};
 
 	void draw() {
-		if (HEIGHT <= 0) return;		
-		char fillColor = this->checkColor();
+		if (HEIGHT <= 0) return;	
 
-		for (int i = 0; i < HEIGHT; ++i) {
-			int leftMost = X - i;
-			int rightMost = X + i;
-			int posY = Y + i;
-			if (posY < BOARD_HEIGHT) {
-				if (leftMost >= 0 && leftMost < BOARD_WIDTH)
-					(*grid)[posY][leftMost] = fillColor;
-				if (rightMost >= 0 && rightMost < BOARD_WIDTH && leftMost != rightMost)
-					(*grid)[posY][rightMost] = fillColor;
+		string isFilled = this->getColor();
+
+		if (isFilled == "none") {
+			for (int i = 0; i < HEIGHT; ++i) {
+				int leftMost = X - i;
+				int rightMost = X + i;
+				int posY = Y + i;
+				if (posY < BOARD_HEIGHT && posY >= 0) {
+					if (leftMost >= 0 && leftMost < BOARD_WIDTH)
+						(*grid)[posY][leftMost] = '*';
+					if (rightMost >= 0 && rightMost < BOARD_WIDTH && leftMost != rightMost)
+						(*grid)[posY][rightMost] = '*';
+				}
+			}
+			for (int j = 0; j < 2 * HEIGHT - 1; ++j) {
+				int baseX = X - HEIGHT + 1 + j;
+				int baseY = Y + HEIGHT - 1;
+				if (baseX >= 0 && baseX < BOARD_WIDTH && baseY < BOARD_HEIGHT)
+					(*grid)[baseY][baseX] = '*';
 			}
 		}
-		for (int j = 0; j < 2 * HEIGHT - 1; ++j) {
-			int baseX = X - HEIGHT + 1 + j;
-			int baseY = Y + HEIGHT - 1;
-			if (baseX >= 0 && baseX < BOARD_WIDTH && baseY < BOARD_HEIGHT)
-				(*grid)[baseY][baseX] = fillColor;
+		else {
+			char fillColor = this->checkColor();
+
+			for (int i = 0; i < HEIGHT; ++i) {
+				int numStars = 2 * i + 1;
+				int leftMost = X - i;
+				int posY = Y + i;
+
+				if (posY < BOARD_HEIGHT && posY >= 0) {
+					for (int j = 0; j < numStars; ++j) {
+						int position = leftMost + j;
+						if (position >= 0 && position < BOARD_WIDTH) {
+							(*grid)[posY][position] = fillColor;
+						}
+					}
+				}
+			}
 		}
 	}
 };
