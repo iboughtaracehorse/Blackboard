@@ -4,20 +4,16 @@
 #include <string>
 #include <vector>
 #include <unordered_map>
+#include "Board.h"
 
 using namespace std;
 
 const int BOARD_WIDTH = 80;
 const int BOARD_HEIGHT = 25;
 
-struct Board;
-class Line;
-class Triangle;
-class Square;
-class Circle;
+class Board;
 
 class Figure {
-
 protected:
 	int X;
 	int Y;
@@ -25,39 +21,38 @@ protected:
 	string COLOR;
 	string TYPE;
 	string ALIAS;
+	Board& grid;
 
 public:
 
-	Figure(Board& board) { X = 0; Y = 0; HEIGHT = 0; COLOR = "none"; ALIAS = ""; }
-
+	Figure(Board& board) : grid(board) { X = 0; Y = 0; HEIGHT = 0; COLOR = "none"; ALIAS = ""; }
+	virtual ~Figure() {};
 	virtual void draw() = 0;
 
-	virtual ~Figure() {};
-
-	virtual void getTypeStr() {
+	void getTypeStr() {
 		cout << TYPE;
 	}
 
-	virtual void getCoordinatesStr() {
+	void getCoordinatesStr() {
 		cout << "x: " << X << " y: " << Y << endl;
 	}
 
-	virtual string getType() {
+	string getType() {
 		return TYPE;
 	}
-	virtual int getX() {
+	int getX() {
 		return X;
 	}
-	virtual int getY() {
+	int getY() {
 		return Y;
 	}
-	virtual int getHeight() {
+	int getHeight() {
 		return HEIGHT;
 	}
-	virtual string getColor() {
+	string getColor() {
 		return COLOR;
 	}
-	virtual string getAlias() {
+	string getAlias() {
 		return ALIAS;
 	}
 
@@ -77,7 +72,6 @@ public:
 
 class Line : public Figure {
 
-	vector<vector<char>>* grid;
 	int X2;
 	int Y2;
 
@@ -88,13 +82,14 @@ public:
 
 	void draw() {
 		char fillColor = this->checkColor();
+		auto& gridAccess = grid.getGrid();
 
 		if (Y == Y2) {
 			int startX = min(X, X2);
 			int endX = max(X, X2);
 			for (int i = startX; i <= endX; ++i) {
 				if (i >= 0 && i < BOARD_WIDTH && Y >= 0 && Y < BOARD_HEIGHT) {
-					(*grid)[Y][i] = fillColor;
+					gridAccess[Y][i] = fillColor;
 				}
 			}
 		}
@@ -103,7 +98,7 @@ public:
 			int endY = max(Y, Y2);
 			for (int i = startY; i <= endY; ++i) {
 				if (X >= 0 && X < BOARD_WIDTH && i >= 0 && i < BOARD_HEIGHT) {
-					(*grid)[i][X] = fillColor;
+					gridAccess[i][X] = fillColor;
 				}
 			}
 		}
@@ -119,8 +114,6 @@ public:
 
 class Square : public Figure {
 
-	vector<vector<char>>* grid;
-
 public:
 	Square(Board& board, int x, int y, int height, string color, string alias) : Figure(board) {
 		X = x; Y = y; HEIGHT = height, TYPE = "square", COLOR = color, ALIAS = alias;
@@ -129,6 +122,8 @@ public:
 	void draw() {
 		if (HEIGHT <= 0) return;
 		string isFilled = this->getColor();
+		auto& gridAccess = grid.getGrid();
+
 
 		if (isFilled == "none") {
 			for (int i = 0; i < HEIGHT; ++i) {
@@ -142,11 +137,11 @@ public:
 					if (posX < 0 || posX >= BOARD_WIDTH) continue;
 
 					if (i == 0 || i == HEIGHT - 1) {
-						(*grid)[posY][posX] = '*';
+						gridAccess[posY][posX] = '*';
 					}
 
 					else if (j == 0 || j == HEIGHT - 1) {
-						(*grid)[posY][posX] = '*';
+						gridAccess[posY][posX] = '*';
 					}
 				}
 			}
@@ -164,7 +159,7 @@ public:
 
 					if (posX < 0 || posX >= BOARD_WIDTH) continue;
 
-					(*grid)[posY][posX] = fillColor;
+					gridAccess[posY][posX] = fillColor;
 				}
 			}
 
@@ -173,8 +168,6 @@ public:
 };
 
 class Triangle : public Figure {
-
-	vector<vector<char>>* grid;
 
 public:
 
@@ -186,6 +179,8 @@ public:
 		if (HEIGHT <= 0) return;	
 
 		string isFilled = this->getColor();
+		auto& gridAccess = grid.getGrid();
+
 
 		if (isFilled == "none") {
 			for (int i = 0; i < HEIGHT; ++i) {
@@ -194,16 +189,16 @@ public:
 				int posY = Y + i;
 				if (posY < BOARD_HEIGHT && posY >= 0) {
 					if (leftMost >= 0 && leftMost < BOARD_WIDTH)
-						(*grid)[posY][leftMost] = '*';
+						gridAccess[posY][leftMost] = '*';
 					if (rightMost >= 0 && rightMost < BOARD_WIDTH && leftMost != rightMost)
-						(*grid)[posY][rightMost] = '*';
+						gridAccess[posY][rightMost] = '*';
 				}
 			}
 			for (int j = 0; j < 2 * HEIGHT - 1; ++j) {
 				int baseX = X - HEIGHT + 1 + j;
 				int baseY = Y + HEIGHT - 1;
 				if (baseX >= 0 && baseX < BOARD_WIDTH && baseY < BOARD_HEIGHT)
-					(*grid)[baseY][baseX] = '*';
+					gridAccess[baseY][baseX] = '*';
 			}
 		}
 		else {
@@ -218,7 +213,7 @@ public:
 					for (int j = 0; j < numStars; ++j) {
 						int position = leftMost + j;
 						if (position >= 0 && position < BOARD_WIDTH) {
-							(*grid)[posY][position] = fillColor;
+							gridAccess[posY][position] = fillColor;
 						}
 					}
 				}
@@ -229,8 +224,6 @@ public:
 
 class Circle : public Figure {
 
-	vector<vector<char>>* grid;
-
 public:
 	Circle(Board& board, int x, int y, int height, string color, string alias) : Figure(board) {
 		X = x; Y = y; HEIGHT = height, TYPE = "circle", COLOR = color, ALIAS = alias;
@@ -240,6 +233,7 @@ public:
 		if (HEIGHT <= 0) return;
 
 		string isFilled = this->getColor();
+		auto& gridAccess = grid.getGrid();
 
 		if (isFilled == "none") {
 			int diameter = HEIGHT;
@@ -253,7 +247,7 @@ public:
 						int posX = X + j;
 						int posY = Y + i;
 						if (posX >= 0 && posX < BOARD_WIDTH && posY < BOARD_HEIGHT) {
-							(*grid)[posX][posY] = '*';
+							gridAccess[posX][posY] = '*';
 						}
 					}
 				}
@@ -272,7 +266,7 @@ public:
 						int posX = X + j;
 						int posY = Y + i;
 						if (posX >= 0 && posX < BOARD_WIDTH && posY >= 0 && posY < BOARD_HEIGHT) {
-							(*grid)[posX][posY] = fillColor;
+							gridAccess[posX][posY] = fillColor;
 						}
 					}
 				}
@@ -281,242 +275,6 @@ public:
 	}
 
 };
-
-struct Board {
-
-	vector<vector<char>> grid;
-	vector<Figure*> figures;
-
-	Board() : grid(BOARD_HEIGHT, vector<char>(BOARD_WIDTH, ' ')) {}
-
-	void clear() {
-		for (int i = 0; i < BOARD_HEIGHT; ++i) {
-			fill(grid[i].begin(), grid[i].end(), ' ');
-		}
-	}
-
-	void print(ostream& target) {
-
-		target << "^";
-		for (int i = 0; i < BOARD_WIDTH; ++i) {
-			target << "-";
-		}
-		target << "^" << endl;
-
-		for (int i = 0; i < BOARD_HEIGHT; ++i) {
-			target << "|";
-			for (int j = 0; j < BOARD_WIDTH; ++j) {
-				target << grid[i][j];
-			}
-			target << "|" << endl;
-		}
-
-		target << "^";
-		for (int i = 0; i < BOARD_WIDTH; ++i) {
-			target << "-";
-		}
-		target << "^" << endl;
-
-	}
-
-	vector<vector<char>>& getGrid() {
-		return grid;
-	}
-
-	void addFigure(Figure* figure) {
-		figures.push_back(figure);
-	}
-
-	void drawFigures() {
-		clear();
-		for (Figure* figure : figures) {
-			figure->draw();
-		}
-	}
-
-	void list() {
-		if (figures.empty()) {
-			cout << endl << "oops! your board must be empty! try 'add' to add new figures!" << endl << endl;
-			return;
-		}
-
-		for (auto& figure : figures) {
-			if (Line* line = dynamic_cast<Line*>(figure)) {
-				cout << "Line named " << line->getAlias() << " , with coordinates: " << line->getX() << " " << line->getY()
-					<< " " << line->getX2() << " " << line->getY2() << " and color: " << line->getColor() << endl;
-			}
-			else if (Triangle* triangle = dynamic_cast<Triangle*>(figure)) {
-				cout << "Triangle named " << triangle->getAlias() << " , with coordinates: " << triangle->getX() << " " << triangle->getY()
-					<< " height: " << triangle->getHeight() << " and color: " << triangle->getColor() << endl;
-			}
-			else if (Square* square = dynamic_cast<Square*>(figure)) {
-				cout << "Square named " << square->getAlias() << " , with coordinates: " << square->getX() << " " << square->getY()
-					<< " height: " << square->getHeight() << " and color: " << square->getColor() << endl;
-			}
-			else if (Circle* circle = dynamic_cast<Circle*>(figure)) {
-				cout << "Circle named " << circle->getAlias() << " , with coordinates: " << circle->getX() << " " << circle->getY()
-					<< " diameter: " << circle->getHeight() << " and color: " << circle->getColor() << endl;
-			}
-		}
-	}
-
-	void undo() {
-		if (figures.empty()) {
-			cout << "no figures on the board!" << endl;
-		}
-		else {
-			figures.pop_back();
-		}
-	}
-
-	void deleteFigures() {
-		while (!figures.empty()) {
-			figures.pop_back();
-		}
-		cout << endl << "all figures were deleted!!" << endl << endl;
-	}
-
-	bool isEmpty() {
-		return figures.empty();
-	}
-
-	void save() {
-		string directory;
-		string filename;
-		ofstream file;
-
-		cout << "enter a full directory (with filename) to save the file in (ot 'this' to save in the current directory): ";
-		getline(cin, directory);
-
-		if (directory == "this") {
-			cout << "how do you want to call your file?: ";
-			getline(cin, filename);
-
-			file.open(filename);
-		}
-		else {
-			file.open(directory);
-		}
-
-		if (file.is_open()) {
-			print(file);
-			file.close();
-		}
-		else {
-			cout << "cannot open the file!!!!!!!!!!!" << endl;
-			return;
-		}
-		cout << "saved successfully!!" << endl;
-	}
-
-	/*void save() {
-		string directory;
-		string filename;
-		ofstream file;
-
-		cout << "enter a full directory (with filename) to save the file in (ot 'this' to save in the current directory): ";
-		getline(cin, directory);
-
-		if (directory == "this") {
-			cout << "how do you want to call your file?: ";
-			getline(cin, filename);
-
-			file.open(filename);
-		}
-		else {
-			file.open(directory);
-		}
-
-		if (file.is_open()) {
-			for (auto figure : figures) {
-				file << figure->getType() << " "
-					<< figure->getX() << " "
-					<< figure->getY() << " "
-					<< figure->getHeight() << endl;
-			}
-		}
-
-		else {
-			cout << "cannot open the file!!!!!!!!!!!" << endl;
-			return;
-		}
-
-		file.close();
-		cout << "saved successfully!!" << endl;
-	}*/
-
-
-	/*void load() {
-		string directory;
-		string filename;
-
-		cout << "enter a full directory (with filename) to load the file in (ot 'this' to load from the current directory): ";
-		getline(cin, directory);
-
-		if (directory == "this") {
-			cout << "enter filename you want to load: ";
-			getline(cin, filename);
-
-			ifstream file(filename);
-
-			if (file.is_open()) {
-				readFromFile(file);
-
-				file.close();
-			}
-			else {
-				cout << "cannot open the file!!!!!!!!!!!" << endl;
-				return;
-			}
-
-		}
-		else {
-
-			ifstream file(directory);
-
-			if (file.is_open()) {
-				readFromFile(file);
-				drawFigures();
-				file.close();
-			}
-			else {
-				cout << "cannot open the file!!!!!!!!!!!" << endl;
-				return;
-			}
-		}
-
-	}
-
-	void readFromFile(ifstream& file) {
-		figures.clear();
-		clear();
-
-		string currentLine;
-
-		while (getline(file, currentLine)) {
-			string type = "";
-			stringstream ss(currentLine);
-			ss >> type;
-
-			if (type == "line") {
-				int x, y, x2, y2;
-				Line* line = new Line(*this, x, y, x2, y2);
-				addFigure(line);
-			}
-			else if (type == "triangle") {
-				int x, y, height;
-				Triangle* triangle = new Triangle(*this, x, y, height);
-				addFigure(triangle);
-			}
-			if (type == "square") {
-				int x, y, height;
-				Square* square = new Square(*this, x, y, height);
-				addFigure(square);
-			}
-		}
-	}*/
-};
-
 
 class Help {
 
