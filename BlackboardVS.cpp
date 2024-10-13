@@ -18,11 +18,12 @@ protected:
 	int X;
 	int Y;
 	int HEIGHT;
+	string COLOR;
 	string TYPE;
 
 public:
 
-	Figure(Board& board) { X = 0; Y = 0; HEIGHT = 0; }
+	Figure(Board& board) { X = 0; Y = 0; HEIGHT = 0; COLOR = "none"; }
 
 	virtual void draw() = 0;
 
@@ -45,6 +46,9 @@ public:
 	}
 	virtual int getHeight() {
 		return HEIGHT;
+	}
+	virtual string getColor() {
+		return COLOR;
 	}
 };
 
@@ -275,31 +279,39 @@ class Line : public Figure {
 	int Y2;
 
 public:
-	Line(Board& board, int x, int y, int x2, int y2) : Figure(board) {
-		X = x; Y = y; X2 = x2; Y2 = y2; TYPE = "line", grid = &board.getGrid();;
+	Line(Board& board, int x, int y, int x2, int y2, string color) : Figure(board) {
+		X = x; Y = y; X2 = x2; Y2 = y2; TYPE = "line", COLOR = color; grid = &board.getGrid();
 	};
 
-
-
 	void draw() {
-		if (Y == Y2) {
-			int startX = min(X, X2);
-			int endX = max(X, X2);
-			for (int i = startX; i <= endX; ++i) {
-				if (i >= 0 && i < BOARD_WIDTH && Y >= 0 && Y < BOARD_HEIGHT) {
-					(*grid)[Y][i] = '*';
+
+		string fillColor = this->getColor();
+		cout << fillColor << endl << endl << endl;
+
+		if (fillColor == "none") {
+			if (Y == Y2) {
+				int startX = min(X, X2);
+				int endX = max(X, X2);
+				for (int i = startX; i <= endX; ++i) {
+					if (i >= 0 && i < BOARD_WIDTH && Y >= 0 && Y < BOARD_HEIGHT) {
+						(*grid)[Y][i] = '*';
+					}
+				}
+			}
+			else if (X == X2) {
+				int startY = min(Y, Y2);
+				int endY = max(Y, Y2);
+				for (int i = startY; i <= endY; ++i) {
+					if (X >= 0 && X < BOARD_WIDTH && i >= 0 && i < BOARD_HEIGHT) {
+						(*grid)[i][X] = '*';
+					}
 				}
 			}
 		}
-		else if (X == X2) {
-			int startY = min(Y, Y2);
-			int endY = max(Y, Y2);
-			for (int i = startY; i <= endY; ++i) {
-				if (X >= 0 && X < BOARD_WIDTH && i >= 0 && i < BOARD_HEIGHT) {
-					(*grid)[i][X] = '*';
-				}
-			}
+		else {
+
 		}
+		
 	}
 };
 
@@ -308,8 +320,8 @@ class Square : public Figure {
 	vector<vector<char>>* grid;
 
 public:
-	Square(Board& board, int x, int y, int height) : Figure(board) {
-		X = x; Y = y; HEIGHT = height, TYPE = "square", grid = &board.getGrid();;
+	Square(Board& board, int x, int y, int height, string color) : Figure(board) {
+		X = x; Y = y; HEIGHT = height, TYPE = "square", COLOR = color; grid = &board.getGrid();;
 	};
 
 	void draw() {
@@ -342,8 +354,8 @@ class Triangle : public Figure {
 
 public:
 
-	Triangle(Board& board, int x, int y, int height) : Figure(board) {
-		X = x; Y = y; HEIGHT = height, TYPE = "triangle"; grid = &board.getGrid();
+	Triangle(Board& board, int x, int y, int height, string color) : Figure(board) {
+		X = x; Y = y; HEIGHT = height, TYPE = "triangle"; COLOR = color; grid = &board.getGrid();
 	};
 
 	void draw() {
@@ -373,8 +385,8 @@ class Circle : public Figure {
 	vector<vector<char>>* grid;
 
 public:
-	Circle(Board& board, int x, int y, int height) : Figure(board) {
-		X = x; Y = y; HEIGHT = height, TYPE = "circle", grid = &board.getGrid();;
+	Circle(Board& board, int x, int y, int height, string color) : Figure(board) {
+		X = x; Y = y; HEIGHT = height, TYPE = "circle", COLOR = color; grid = &board.getGrid();;
 	};
 
 	void draw() {
@@ -534,6 +546,7 @@ public:
 		int height = 0;
 		int x2 = 0;
 		int y2 = 0;
+		string color;
 
 		cout << "enter x--position: ";
 		cin >> x;
@@ -547,10 +560,13 @@ public:
 
 			cout << "enter end y--position: ";
 			cin >> y2;
+
+			cout << "enter fill color ('none' for transparent): ";
+			cin >> color;
 			cin.ignore();
 
 			if (x == x2 || y == y2) {
-				Line* line = new Line(board, x, y, x2, y2);
+				Line* line = new Line(board, x, y, x2, y2, color);
 				board.addFigure(line);
 				cout << "new line was added!" << endl;
 			}
@@ -558,23 +574,28 @@ public:
 				cout << "only horizontal or vertical lines are available!!" << endl;
 			}
 		}
+
 		else if (userInput == 1) {
 			cout << "enter height: ";
 			cin >> height;
+			cout << "enter fill color ('none' for transparent): ";
+			cin >> color;
 			cin.ignore();
 
 
-			Triangle* triangle = new Triangle(board, x, y, height);
+			Triangle* triangle = new Triangle(board, x, y, height, color);
 			board.addFigure(triangle);
 			cout << "new triangle was added!" << endl;
 		}
 		else if (userInput == 2) {
 			cout << "enter height: ";
 			cin >> height;
+			cout << "enter fill color ('none' for transparent): ";
+			cin >> color;
 			cin.ignore();
 
 
-			Square* square = new Square(board, x, y, height);
+			Square* square = new Square(board, x, y, height, color);
 			board.addFigure(square);
 			cout << "new square was added!" << endl;
 		}
@@ -582,17 +603,17 @@ public:
 		else if (userInput == 3) {
 			cout << "enter diameter: ";
 			cin >> height;
+			cout << "enter fill color ('none' for transparent): ";
+			cin >> color;
 			cin.ignore();
 
 
-			Circle* circle = new Circle(board, x, y, height);
+			Circle* circle = new Circle(board, x, y, height, color);
 			board.addFigure(circle);
 			cout << "new circle was added!" << endl;
 		}
-		else {
-			cout << "we don't carry THIS here..." << endl;
-		}
 	}
+
 
 	bool deletionWarning() {
 		string input;
