@@ -24,10 +24,11 @@ protected:
 	int HEIGHT;
 	string COLOR;
 	string TYPE;
+	string ALIAS;
 
 public:
 
-	Figure(Board& board) { X = 0; Y = 0; HEIGHT = 0; COLOR = "none"; }
+	Figure(Board& board) { X = 0; Y = 0; HEIGHT = 0; COLOR = "none"; ALIAS = ""; }
 
 	virtual void draw() = 0;
 
@@ -56,6 +57,9 @@ public:
 	virtual string getColor() {
 		return COLOR;
 	}
+	virtual string getAlias() {
+		return ALIAS;
+	}
 
 	char checkColor() {
 		string color = this->getColor();
@@ -78,8 +82,8 @@ class Line : public Figure {
 	int Y2;
 
 public:
-	Line(Board& board, int x, int y, int x2, int y2, string color) : Figure(board) {
-		X = x; Y = y; X2 = x2; Y2 = y2; TYPE = "line", COLOR = color;
+	Line(Board& board, int x, int y, int x2, int y2, string color, string alias) : Figure(board) {
+		X = x; Y = y; X2 = x2; Y2 = y2; TYPE = "line", COLOR = color, ALIAS = alias;
 	};
 
 	void draw() {
@@ -118,8 +122,8 @@ class Square : public Figure {
 	vector<vector<char>>* grid;
 
 public:
-	Square(Board& board, int x, int y, int height, string color) : Figure(board) {
-		X = x; Y = y; HEIGHT = height, TYPE = "square", COLOR = color;
+	Square(Board& board, int x, int y, int height, string color, string alias) : Figure(board) {
+		X = x; Y = y; HEIGHT = height, TYPE = "square", COLOR = color, ALIAS = alias;
 	};
 
 	void draw() {
@@ -164,7 +168,7 @@ public:
 				}
 			}
 
-		}	
+		}
 	}
 };
 
@@ -174,12 +178,12 @@ class Triangle : public Figure {
 
 public:
 
-	Triangle(Board& board, int x, int y, int height, string color) : Figure(board) {
-		X = x; Y = y; HEIGHT = height, TYPE = "triangle"; COLOR = color;
+	Triangle(Board& board, int x, int y, int height, string color, string alias) : Figure(board) {
+		X = x; Y = y; HEIGHT = height, TYPE = "triangle"; COLOR = color, ALIAS = alias;
 	};
 
 	void draw() {
-		if (HEIGHT <= 0) return;	
+		if (HEIGHT <= 0) return;
 
 		string isFilled = this->getColor();
 
@@ -228,8 +232,8 @@ class Circle : public Figure {
 	vector<vector<char>>* grid;
 
 public:
-	Circle(Board& board, int x, int y, int height, string color) : Figure(board) {
-		X = x; Y = y; HEIGHT = height, TYPE = "circle", COLOR = color;
+	Circle(Board& board, int x, int y, int height, string color, string alias) : Figure(board) {
+		X = x; Y = y; HEIGHT = height, TYPE = "circle", COLOR = color, ALIAS = alias;
 	};
 
 	void draw() {
@@ -338,19 +342,19 @@ struct Board {
 
 		for (auto& figure : figures) {
 			if (Line* line = dynamic_cast<Line*>(figure)) {
-				cout << "Line with coordinates: " << line->getX() << " " << line->getY()
+				cout << "Line named " << line->getAlias() << ", with coordinates: " << line->getX() << " " << line->getY()
 					<< " " << line->getX2() << " " << line->getY2() << " and color: " << line->getColor() << endl;
 			}
 			else if (Triangle* triangle = dynamic_cast<Triangle*>(figure)) {
-				cout << "Triangle with coordinates: " << triangle->getX() << " " << triangle->getY()
+				cout << "Triangle named " << triangle->getAlias() << ", with coordinates: " << triangle->getX() << " " << triangle->getY()
 					<< " height: " << triangle->getHeight() << " and color: " << triangle->getColor() << endl;
 			}
 			else if (Square* square = dynamic_cast<Square*>(figure)) {
-				cout << "Square with coordinates: " << square->getX() << " " << square->getY()
+				cout << "Square named " << square->getAlias() << ", with coordinates: " << square->getX() << " " << square->getY()
 					<< " height: " << square->getHeight() << " and color: " << square->getColor() << endl;
 			}
 			else if (Circle* circle = dynamic_cast<Circle*>(figure)) {
-				cout << "Circle with coordinates: " << circle->getX() << " " << circle->getY()
+				cout << "Circle named " << circle->getAlias() << ", with coordinates: " << circle->getX() << " " << circle->getY()
 					<< " diameter: " << circle->getHeight() << " and color: " << circle->getColor() << endl;
 			}
 		}
@@ -534,7 +538,7 @@ public:
 		cout << "   -- example: 5, 10, 9, 10, green" << endl;
 		cout << "     (draws a green line starting at position (5,10) and ending at (9, 10). can draw only horizontal or vertical lines)" << endl;
 		cout << endl;
-		
+
 		cout << "1. triangle" << endl;
 		cout << "   -- has two coordinates (x, y), height, and color" << endl;
 		cout << "   -- example: 5, 10, 9, green" << endl;
@@ -546,7 +550,7 @@ public:
 		cout << "   -- example: 10, 20, 10, green" << endl;
 		cout << "     (draws a green square starting at position (10,20) with a height of 10)" << endl;
 		cout << endl;
-		
+
 		cout << "3. circle" << endl;
 		cout << "   -- has two coordinates (x, y), height (diameter), and color" << endl;
 		cout << "   -- example: 10, 20, 10, green" << endl;
@@ -563,7 +567,7 @@ public:
 		cout << "1. add" << endl;
 		cout << "   -- description: allows to add a new figure" << endl;
 		cout << endl;
-		
+
 		cout << "2. print" << endl;
 		cout << "   -- description: prints board to console" << endl;
 		cout << endl;
@@ -579,7 +583,7 @@ public:
 		cout << "5. clear" << endl;
 		cout << "   -- description: clears the board" << endl;
 		cout << endl;
-		
+
 		cout << "6. save" << endl;
 		cout << "   -- description: saves the board to the chosen file" << endl;
 		cout << endl;
@@ -653,6 +657,10 @@ public:
 		int x2 = 0;
 		int y2 = 0;
 		string color;
+		string alias;
+
+		cout << "how do you want to call your new figure: ";
+		cin >> alias;
 
 		cout << "enter x--position: ";
 		cin >> x;
@@ -672,9 +680,9 @@ public:
 			cin.ignore();
 
 			if (x == x2 || y == y2) {
-				Line* line = new Line(board, x, y, x2, y2, color);
+				Line* line = new Line(board, x, y, x2, y2, color, alias);
 				board.addFigure(line);
-				cout << "new line was added!" << endl;
+				cout << "new line named " << alias << " was added!" << endl;
 			}
 			else {
 				cout << "only horizontal or vertical lines are available!!" << endl;
@@ -689,9 +697,9 @@ public:
 			cin.ignore();
 
 
-			Triangle* triangle = new Triangle(board, x, y, height, color);
+			Triangle* triangle = new Triangle(board, x, y, height, color, alias);
 			board.addFigure(triangle);
-			cout << "new triangle was added!" << endl;
+			cout << "new triangle named " << alias << " was added!" << endl;
 		}
 		else if (userInput == 2) {
 			cout << "enter height: ";
@@ -701,11 +709,11 @@ public:
 			cin.ignore();
 
 
-			Square* square = new Square(board, x, y, height, color);
+			Square* square = new Square(board, x, y, height, color, alias);
 			board.addFigure(square);
-			cout << "new square was added!" << endl;
+			cout << "new square named " << alias << " was added!" << endl;
 		}
-		
+
 		else if (userInput == 3) {
 			cout << "enter diameter: ";
 			cin >> height;
@@ -714,9 +722,9 @@ public:
 			cin.ignore();
 
 
-			Circle* circle = new Circle(board, x, y, height, color);
+			Circle* circle = new Circle(board, x, y, height, color, alias);
 			board.addFigure(circle);
-			cout << "new circle was added!" << endl;
+			cout << "new circle named " << alias << " was added!" << endl;
 		}
 	}
 
