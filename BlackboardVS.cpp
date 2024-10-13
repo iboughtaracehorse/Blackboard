@@ -11,6 +11,10 @@ const int BOARD_WIDTH = 80;
 const int BOARD_HEIGHT = 25;
 
 struct Board;
+class Line;
+class Triangle;
+class Square;
+class Circle;
 
 class Figure {
 
@@ -26,6 +30,8 @@ public:
 	Figure(Board& board) { X = 0; Y = 0; HEIGHT = 0; COLOR = "none"; }
 
 	virtual void draw() = 0;
+
+	virtual ~Figure() {};
 
 	virtual void getTypeStr() {
 		cout << TYPE;
@@ -63,6 +69,213 @@ public:
 			return fillColor;
 		}
 	}
+};
+
+class Line : public Figure {
+
+	vector<vector<char>>* grid;
+	int X2;
+	int Y2;
+
+public:
+	Line(Board& board, int x, int y, int x2, int y2, string color) : Figure(board) {
+		X = x; Y = y; X2 = x2; Y2 = y2; TYPE = "line", COLOR = color;
+	};
+
+	void draw() {
+		char fillColor = this->checkColor();
+
+		if (Y == Y2) {
+			int startX = min(X, X2);
+			int endX = max(X, X2);
+			for (int i = startX; i <= endX; ++i) {
+				if (i >= 0 && i < BOARD_WIDTH && Y >= 0 && Y < BOARD_HEIGHT) {
+					(*grid)[Y][i] = fillColor;
+				}
+			}
+		}
+		else if (X == X2) {
+			int startY = min(Y, Y2);
+			int endY = max(Y, Y2);
+			for (int i = startY; i <= endY; ++i) {
+				if (X >= 0 && X < BOARD_WIDTH && i >= 0 && i < BOARD_HEIGHT) {
+					(*grid)[i][X] = fillColor;
+				}
+			}
+		}
+	}
+
+	int getX2() {
+		return X2;
+	}
+	int getY2() {
+		return Y2;
+	}
+};
+
+class Square : public Figure {
+
+	vector<vector<char>>* grid;
+
+public:
+	Square(Board& board, int x, int y, int height, string color) : Figure(board) {
+		X = x; Y = y; HEIGHT = height, TYPE = "square", COLOR = color;
+	};
+
+	void draw() {
+		if (HEIGHT <= 0) return;
+		string isFilled = this->getColor();
+
+		if (isFilled == "none") {
+			for (int i = 0; i < HEIGHT; ++i) {
+				int posY = Y + i;
+
+				if (posY < 0 || posY >= BOARD_HEIGHT) continue;
+
+				for (int j = 0; j < HEIGHT; ++j) {
+					int posX = X + j;
+
+					if (posX < 0 || posX >= BOARD_WIDTH) continue;
+
+					if (i == 0 || i == HEIGHT - 1) {
+						(*grid)[posY][posX] = '*';
+					}
+
+					else if (j == 0 || j == HEIGHT - 1) {
+						(*grid)[posY][posX] = '*';
+					}
+				}
+			}
+		}
+		else {
+			char fillColor = this->checkColor();
+
+			for (int i = 0; i < HEIGHT; ++i) {
+				int posY = Y + i;
+
+				if (posY < 0 || posY >= BOARD_HEIGHT) continue;
+
+				for (int j = 0; j < HEIGHT; ++j) {
+					int posX = X + j;
+
+					if (posX < 0 || posX >= BOARD_WIDTH) continue;
+
+					(*grid)[posY][posX] = fillColor;
+				}
+			}
+
+		}	
+	}
+};
+
+class Triangle : public Figure {
+
+	vector<vector<char>>* grid;
+
+public:
+
+	Triangle(Board& board, int x, int y, int height, string color) : Figure(board) {
+		X = x; Y = y; HEIGHT = height, TYPE = "triangle"; COLOR = color;
+	};
+
+	void draw() {
+		if (HEIGHT <= 0) return;	
+
+		string isFilled = this->getColor();
+
+		if (isFilled == "none") {
+			for (int i = 0; i < HEIGHT; ++i) {
+				int leftMost = X - i;
+				int rightMost = X + i;
+				int posY = Y + i;
+				if (posY < BOARD_HEIGHT && posY >= 0) {
+					if (leftMost >= 0 && leftMost < BOARD_WIDTH)
+						(*grid)[posY][leftMost] = '*';
+					if (rightMost >= 0 && rightMost < BOARD_WIDTH && leftMost != rightMost)
+						(*grid)[posY][rightMost] = '*';
+				}
+			}
+			for (int j = 0; j < 2 * HEIGHT - 1; ++j) {
+				int baseX = X - HEIGHT + 1 + j;
+				int baseY = Y + HEIGHT - 1;
+				if (baseX >= 0 && baseX < BOARD_WIDTH && baseY < BOARD_HEIGHT)
+					(*grid)[baseY][baseX] = '*';
+			}
+		}
+		else {
+			char fillColor = this->checkColor();
+
+			for (int i = 0; i < HEIGHT; ++i) {
+				int numStars = 2 * i + 1;
+				int leftMost = X - i;
+				int posY = Y + i;
+
+				if (posY < BOARD_HEIGHT && posY >= 0) {
+					for (int j = 0; j < numStars; ++j) {
+						int position = leftMost + j;
+						if (position >= 0 && position < BOARD_WIDTH) {
+							(*grid)[posY][position] = fillColor;
+						}
+					}
+				}
+			}
+		}
+	}
+};
+
+class Circle : public Figure {
+
+	vector<vector<char>>* grid;
+
+public:
+	Circle(Board& board, int x, int y, int height, string color) : Figure(board) {
+		X = x; Y = y; HEIGHT = height, TYPE = "circle", COLOR = color;
+	};
+
+	void draw() {
+		if (HEIGHT <= 0) return;
+
+		string isFilled = this->getColor();
+
+		if (isFilled == "none") {
+			int diameter = HEIGHT;
+			int radius = diameter / 2;
+
+			for (int i = 0; i <= diameter; ++i) {
+				for (int j = 0; j <= diameter; j++) {
+					double centreDistance = sqrt((i - radius) * (i - radius) + (j - radius) * (j - radius));
+
+					if (centreDistance >= radius - 0.5 && centreDistance <= radius + 0.5) {
+						int posX = X + j;
+						int posY = Y + i;
+						if (posX >= 0 && posX < BOARD_WIDTH && posY < BOARD_HEIGHT) {
+							(*grid)[posX][posY] = '*';
+						}
+					}
+				}
+			}
+		}
+		else {
+			char fillColor = this->checkColor();
+			int diameter = HEIGHT;
+			int radius = diameter / 2;
+
+			for (int i = 0; i <= diameter; ++i) {
+				for (int j = 0; j <= diameter; j++) {
+					double centreDistance = sqrt((i - radius) * (i - radius) + (j - radius) * (j - radius));
+
+					if (centreDistance <= radius + 0.5) { //chatGPT helped me with this math thing
+						int posX = X + j;
+						int posY = Y + i;
+						if (posX >= 0 && posX < BOARD_WIDTH && posY >= 0 && posY < BOARD_HEIGHT) {
+							(*grid)[posX][posY] = fillColor;
+						}
+					}
+				}
+			}
+		}
+	}
+
 };
 
 struct Board {
@@ -120,11 +333,26 @@ struct Board {
 	void list() {
 		if (figures.empty()) {
 			cout << endl << "oops! your board must be empty! try 'add' to add new figures!" << endl << endl;
+			return;
 		}
+
 		for (auto& figure : figures) {
-			figure->getTypeStr();
-			cout << " with coordinates ";
-			figure->getCoordinatesStr();
+			if (Line* line = dynamic_cast<Line*>(figure)) {
+				cout << "Line with coordinates: " << line->getX() << " " << line->getY()
+					<< " " << line->getX2() << " " << line->getY2() << " and color: " << line->getColor() << endl;
+			}
+			else if (Triangle* triangle = dynamic_cast<Triangle*>(figure)) {
+				cout << "Triangle with coordinates: " << triangle->getX() << " " << triangle->getY()
+					<< " height: " << triangle->getHeight() << " and color: " << triangle->getColor() << endl;
+			}
+			else if (Square* square = dynamic_cast<Square*>(figure)) {
+				cout << "Square with coordinates: " << square->getX() << " " << square->getY()
+					<< " height: " << square->getHeight() << " and color: " << square->getColor() << endl;
+			}
+			else if (Circle* circle = dynamic_cast<Circle*>(figure)) {
+				cout << "Circle with coordinates: " << circle->getX() << " " << circle->getY()
+					<< " diameter: " << circle->getHeight() << " and color: " << circle->getColor() << endl;
+			}
 		}
 	}
 
@@ -174,7 +402,7 @@ struct Board {
 			cout << "cannot open the file!!!!!!!!!!!" << endl;
 			return;
 		}
-			cout << "saved successfully!!" << endl;
+		cout << "saved successfully!!" << endl;
 	}
 
 	/*void save() {
@@ -285,205 +513,6 @@ struct Board {
 	}*/
 };
 
-class Line : public Figure {
-
-	vector<vector<char>>* grid;
-	int X2;
-	int Y2;
-
-public:
-	Line(Board& board, int x, int y, int x2, int y2, string color) : Figure(board) {
-		X = x; Y = y; X2 = x2; Y2 = y2; TYPE = "line", COLOR = color; grid = &board.getGrid();
-	};
-
-	void draw() {
-		char fillColor = this->checkColor();
-
-		if (Y == Y2) {
-			int startX = min(X, X2);
-			int endX = max(X, X2);
-			for (int i = startX; i <= endX; ++i) {
-				if (i >= 0 && i < BOARD_WIDTH && Y >= 0 && Y < BOARD_HEIGHT) {
-					(*grid)[Y][i] = fillColor;
-				}
-			}
-		}
-		else if (X == X2) {
-			int startY = min(Y, Y2);
-			int endY = max(Y, Y2);
-			for (int i = startY; i <= endY; ++i) {
-				if (X >= 0 && X < BOARD_WIDTH && i >= 0 && i < BOARD_HEIGHT) {
-					(*grid)[i][X] = fillColor;
-				}
-			}
-		}
-	}
-};
-
-class Square : public Figure {
-
-	vector<vector<char>>* grid;
-
-public:
-	Square(Board& board, int x, int y, int height, string color) : Figure(board) {
-		X = x; Y = y; HEIGHT = height, TYPE = "square", COLOR = color; grid = &board.getGrid();;
-	};
-
-	void draw() {
-		if (HEIGHT <= 0) return;
-		string isFilled = this->getColor();
-
-		if (isFilled == "none") {
-			for (int i = 0; i < HEIGHT; ++i) {
-				int posY = Y + i;
-
-				if (posY < 0 || posY >= BOARD_HEIGHT) continue;
-
-				for (int j = 0; j < HEIGHT; ++j) {
-					int posX = X + j;
-
-					if (posX < 0 || posX >= BOARD_WIDTH) continue;
-
-					if (i == 0 || i == HEIGHT - 1) {
-						(*grid)[posY][posX] = '*';
-					}
-
-					else if (j == 0 || j == HEIGHT - 1) {
-						(*grid)[posY][posX] = '*';
-					}
-				}
-			}
-		}
-		else {
-			char fillColor = this->checkColor();
-
-			for (int i = 0; i < HEIGHT; ++i) {
-				int posY = Y + i;
-
-				if (posY < 0 || posY >= BOARD_HEIGHT) continue;
-
-				for (int j = 0; j < HEIGHT; ++j) {
-					int posX = X + j;
-
-					if (posX < 0 || posX >= BOARD_WIDTH) continue;
-
-					(*grid)[posY][posX] = fillColor;
-				}
-			}
-
-		}	
-	}
-};
-
-class Triangle : public Figure {
-
-	vector<vector<char>>* grid;
-
-public:
-
-	Triangle(Board& board, int x, int y, int height, string color) : Figure(board) {
-		X = x; Y = y; HEIGHT = height, TYPE = "triangle"; COLOR = color; grid = &board.getGrid();
-	};
-
-	void draw() {
-		if (HEIGHT <= 0) return;	
-
-		string isFilled = this->getColor();
-
-		if (isFilled == "none") {
-			for (int i = 0; i < HEIGHT; ++i) {
-				int leftMost = X - i;
-				int rightMost = X + i;
-				int posY = Y + i;
-				if (posY < BOARD_HEIGHT && posY >= 0) {
-					if (leftMost >= 0 && leftMost < BOARD_WIDTH)
-						(*grid)[posY][leftMost] = '*';
-					if (rightMost >= 0 && rightMost < BOARD_WIDTH && leftMost != rightMost)
-						(*grid)[posY][rightMost] = '*';
-				}
-			}
-			for (int j = 0; j < 2 * HEIGHT - 1; ++j) {
-				int baseX = X - HEIGHT + 1 + j;
-				int baseY = Y + HEIGHT - 1;
-				if (baseX >= 0 && baseX < BOARD_WIDTH && baseY < BOARD_HEIGHT)
-					(*grid)[baseY][baseX] = '*';
-			}
-		}
-		else {
-			char fillColor = this->checkColor();
-
-			for (int i = 0; i < HEIGHT; ++i) {
-				int numStars = 2 * i + 1;
-				int leftMost = X - i;
-				int posY = Y + i;
-
-				if (posY < BOARD_HEIGHT && posY >= 0) {
-					for (int j = 0; j < numStars; ++j) {
-						int position = leftMost + j;
-						if (position >= 0 && position < BOARD_WIDTH) {
-							(*grid)[posY][position] = fillColor;
-						}
-					}
-				}
-			}
-		}
-	}
-};
-
-class Circle : public Figure {
-
-	vector<vector<char>>* grid;
-
-public:
-	Circle(Board& board, int x, int y, int height, string color) : Figure(board) {
-		X = x; Y = y; HEIGHT = height, TYPE = "circle", COLOR = color; grid = &board.getGrid();;
-	};
-
-	void draw() {
-		if (HEIGHT <= 0) return;
-
-		string isFilled = this->getColor();
-
-		if (isFilled == "none") {
-			int diameter = HEIGHT;
-			int radius = diameter / 2;
-
-			for (int i = 0; i <= diameter; ++i) {
-				for (int j = 0; j <= diameter; j++) {
-					double centreDistance = sqrt((i - radius) * (i - radius) + (j - radius) * (j - radius));
-
-					if (centreDistance >= radius - 0.5 && centreDistance <= radius + 0.5) {
-						int posX = X + j;
-						int posY = Y + i;
-						if (posX >= 0 && posX < BOARD_WIDTH && posY < BOARD_HEIGHT) {
-							(*grid)[posX][posY] = '*';
-						}
-					}
-				}
-			}
-		}
-		else {
-			char fillColor = this->checkColor();
-			int diameter = HEIGHT;
-			int radius = diameter / 2;
-
-			for (int i = 0; i <= diameter; ++i) {
-				for (int j = 0; j <= diameter; j++) {
-					double centreDistance = sqrt((i - radius) * (i - radius) + (j - radius) * (j - radius));
-
-					if (centreDistance <= radius + 0.5) { //chatGPT helped me with this math thing
-						int posX = X + j;
-						int posY = Y + i;
-						if (posX >= 0 && posX < BOARD_WIDTH && posY >= 0 && posY < BOARD_HEIGHT) {
-							(*grid)[posX][posY] = fillColor;
-						}
-					}
-				}
-			}
-		}
-	}
-
-};
 
 class Help {
 
