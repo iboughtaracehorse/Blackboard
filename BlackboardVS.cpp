@@ -9,12 +9,10 @@ using namespace std;
 
 const int BOARD_WIDTH = 80;
 const int BOARD_HEIGHT = 25;
+vector<vector<char>> grid;
 
 struct Board;
-class Line;
-class Triangle;
-class Square;
-class Circle;
+
 
 class Figure {
 
@@ -77,12 +75,13 @@ public:
 
 class Line : public Figure {
 
-	vector<vector<char>>* grid;
+	vector<vector<char>>& grid;
+
 	int X2;
 	int Y2;
 
 public:
-	Line(Board& board, int x, int y, int x2, int y2, string color, string alias) : Figure(board) {
+	Line(Board& board, int x, int y, int x2, int y2, string color, string alias) : Figure(board), grid(grid) {
 		X = x; Y = y; X2 = x2; Y2 = y2; TYPE = "line", COLOR = color, ALIAS = alias;
 	};
 
@@ -94,7 +93,7 @@ public:
 			int endX = max(X, X2);
 			for (int i = startX; i <= endX; ++i) {
 				if (i >= 0 && i < BOARD_WIDTH && Y >= 0 && Y < BOARD_HEIGHT) {
-					(*grid)[Y][i] = fillColor;
+					grid[Y][i] = fillColor;
 				}
 			}
 		}
@@ -103,7 +102,7 @@ public:
 			int endY = max(Y, Y2);
 			for (int i = startY; i <= endY; ++i) {
 				if (X >= 0 && X < BOARD_WIDTH && i >= 0 && i < BOARD_HEIGHT) {
-					(*grid)[i][X] = fillColor;
+					grid[i][X] = fillColor;
 				}
 			}
 		}
@@ -119,10 +118,10 @@ public:
 
 class Square : public Figure {
 
-	vector<vector<char>>* grid;
+	vector<vector<char>>& grid;
 
 public:
-	Square(Board& board, int x, int y, int height, string color, string alias) : Figure(board) {
+	Square(Board& board, int x, int y, int height, string color, string alias) : Figure(board), grid(grid) {
 		X = x; Y = y; HEIGHT = height, TYPE = "square", COLOR = color, ALIAS = alias;
 	};
 
@@ -142,11 +141,11 @@ public:
 					if (posX < 0 || posX >= BOARD_WIDTH) continue;
 
 					if (i == 0 || i == HEIGHT - 1) {
-						(*grid)[posY][posX] = '*';
+						grid[posY][posX] = '*';
 					}
 
 					else if (j == 0 || j == HEIGHT - 1) {
-						(*grid)[posY][posX] = '*';
+						grid[posY][posX] = '*';
 					}
 				}
 			}
@@ -164,7 +163,7 @@ public:
 
 					if (posX < 0 || posX >= BOARD_WIDTH) continue;
 
-					(*grid)[posY][posX] = fillColor;
+					grid[posY][posX] = fillColor;
 				}
 			}
 
@@ -174,11 +173,11 @@ public:
 
 class Triangle : public Figure {
 
-	vector<vector<char>>* grid;
+	vector<vector<char>>& grid;
 
 public:
 
-	Triangle(Board& board, int x, int y, int height, string color, string alias) : Figure(board) {
+	Triangle(Board& board, int x, int y, int height, string color, string alias) : Figure(board), grid(grid) {
 		X = x; Y = y; HEIGHT = height, TYPE = "triangle"; COLOR = color, ALIAS = alias;
 	};
 
@@ -194,16 +193,16 @@ public:
 				int posY = Y + i;
 				if (posY < BOARD_HEIGHT && posY >= 0) {
 					if (leftMost >= 0 && leftMost < BOARD_WIDTH)
-						(*grid)[posY][leftMost] = '*';
+						grid[posY][leftMost] = '*';
 					if (rightMost >= 0 && rightMost < BOARD_WIDTH && leftMost != rightMost)
-						(*grid)[posY][rightMost] = '*';
+						grid[posY][rightMost] = '*';
 				}
 			}
 			for (int j = 0; j < 2 * HEIGHT - 1; ++j) {
 				int baseX = X - HEIGHT + 1 + j;
 				int baseY = Y + HEIGHT - 1;
 				if (baseX >= 0 && baseX < BOARD_WIDTH && baseY < BOARD_HEIGHT)
-					(*grid)[baseY][baseX] = '*';
+					grid[baseY][baseX] = '*';
 			}
 		}
 		else {
@@ -218,7 +217,7 @@ public:
 					for (int j = 0; j < numStars; ++j) {
 						int position = leftMost + j;
 						if (position >= 0 && position < BOARD_WIDTH) {
-							(*grid)[posY][position] = fillColor;
+							grid[posY][position] = fillColor;
 						}
 					}
 				}
@@ -229,10 +228,11 @@ public:
 
 class Circle : public Figure {
 
-	vector<vector<char>>* grid;
+	vector<vector<char>>& grid;
+
 
 public:
-	Circle(Board& board, int x, int y, int height, string color, string alias) : Figure(board) {
+	Circle(Board& board, int x, int y, int height, string color, string alias) : Figure(board), grid(grid) {
 		X = x; Y = y; HEIGHT = height, TYPE = "circle", COLOR = color, ALIAS = alias;
 	};
 
@@ -253,7 +253,7 @@ public:
 						int posX = X + j;
 						int posY = Y + i;
 						if (posX >= 0 && posX < BOARD_WIDTH && posY < BOARD_HEIGHT) {
-							(*grid)[posX][posY] = '*';
+							grid[posX][posY] = '*';
 						}
 					}
 				}
@@ -272,7 +272,7 @@ public:
 						int posX = X + j;
 						int posY = Y + i;
 						if (posX >= 0 && posX < BOARD_WIDTH && posY >= 0 && posY < BOARD_HEIGHT) {
-							(*grid)[posX][posY] = fillColor;
+							grid[posX][posY] = fillColor;
 						}
 					}
 				}
@@ -342,19 +342,19 @@ struct Board {
 
 		for (auto& figure : figures) {
 			if (Line* line = dynamic_cast<Line*>(figure)) {
-				cout << "Line named " << line->getAlias() << ", with coordinates: " << line->getX() << " " << line->getY()
+				cout << "Line named " << line->getAlias() << " , with coordinates: " << line->getX() << " " << line->getY()
 					<< " " << line->getX2() << " " << line->getY2() << " and color: " << line->getColor() << endl;
 			}
 			else if (Triangle* triangle = dynamic_cast<Triangle*>(figure)) {
-				cout << "Triangle named " << triangle->getAlias() << ", with coordinates: " << triangle->getX() << " " << triangle->getY()
+				cout << "Triangle named " << triangle->getAlias() << " , with coordinates: " << triangle->getX() << " " << triangle->getY()
 					<< " height: " << triangle->getHeight() << " and color: " << triangle->getColor() << endl;
 			}
 			else if (Square* square = dynamic_cast<Square*>(figure)) {
-				cout << "Square named " << square->getAlias() << ", with coordinates: " << square->getX() << " " << square->getY()
+				cout << "Square named " << square->getAlias() << " , with coordinates: " << square->getX() << " " << square->getY()
 					<< " height: " << square->getHeight() << " and color: " << square->getColor() << endl;
 			}
 			else if (Circle* circle = dynamic_cast<Circle*>(figure)) {
-				cout << "Circle named " << circle->getAlias() << ", with coordinates: " << circle->getX() << " " << circle->getY()
+				cout << "Circle named " << circle->getAlias() << " , with coordinates: " << circle->getX() << " " << circle->getY()
 					<< " diameter: " << circle->getHeight() << " and color: " << circle->getColor() << endl;
 			}
 		}
@@ -380,7 +380,7 @@ struct Board {
 		return figures.empty();
 	}
 
-	void save() {
+	/*void save() {
 		string directory;
 		string filename;
 		ofstream file;
@@ -407,9 +407,9 @@ struct Board {
 			return;
 		}
 		cout << "saved successfully!!" << endl;
-	}
+	}*/
 
-	/*void save() {
+	void save() {
 		string directory;
 		string filename;
 		ofstream file;
@@ -432,7 +432,8 @@ struct Board {
 				file << figure->getType() << " "
 					<< figure->getX() << " "
 					<< figure->getY() << " "
-					<< figure->getHeight() << endl;
+					<< figure->getHeight() << " "
+					<< figure->getColor() << endl;
 			}
 		}
 
@@ -443,8 +444,7 @@ struct Board {
 
 		file.close();
 		cout << "saved successfully!!" << endl;
-	}*/
-
+	}
 
 	/*void load() {
 		string directory;
@@ -515,6 +515,28 @@ struct Board {
 			}
 		}
 	}*/
+
+	Figure* select() {
+
+		if (figures.empty()) {
+			cout << "nothing on the board yet!" << endl;
+			return nullptr;
+		}
+
+		string alias;
+		cout << "what figure would you like to select? (write alias only): ";
+		cin >> alias;
+		cin.ignore();
+
+		for (auto& figure : figures) {
+			if (figure->getAlias() == alias) {
+				cout << alias << " selected successfully!" << endl;
+				return figure;
+			}
+		}
+		cout << "no such figure!" << endl;
+		return nullptr;
+	}
 };
 
 
@@ -627,6 +649,9 @@ public:
 		else if (command == "save") {
 			board.save();
 		}
+		else if (command == "select") {
+			board.select();
+		}
 		else if (command == "load") {
 			cout << "NOT IMPLEMENTED" << endl;
 			//board.load();
@@ -727,7 +752,6 @@ public:
 			cout << "new circle named " << alias << " was added!" << endl;
 		}
 	}
-
 
 	bool deletionWarning() {
 		string input;
