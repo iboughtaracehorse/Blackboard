@@ -539,6 +539,20 @@ struct Board {
 		cout << "no such figure!" << endl;
 		return nullptr;
 	}
+
+	Figure* getSelected() {
+		return selectedFigure;
+	}
+
+	void remove(Figure* figure) {
+		selectedFigure = nullptr;
+
+		auto i = find(figures.begin(), figures.end(), figure); //int didnt workout
+		if (i != figures.end()) {
+			figures.erase(i);
+			cout << "selected figure removed successfully! nothing is selected now" << endl;
+		}
+	}
 };
 
 
@@ -653,6 +667,9 @@ public:
 		}
 		else if (command == "select") {
 			board.select();
+		}
+		else if (command == "remove") {
+			board.remove(board.getSelected());
 		}
 		else if (command == "load") {
 			cout << "NOT IMPLEMENTED" << endl;
