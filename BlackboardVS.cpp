@@ -286,6 +286,7 @@ struct Board {
 
 	vector<vector<char>> grid;
 	vector<Figure*> figures;
+	Figure* selectedFigure = nullptr;
 
 	Board() : grid(BOARD_HEIGHT, vector<char>(BOARD_WIDTH, ' ')) {}
 
@@ -531,6 +532,7 @@ struct Board {
 		for (auto& figure : figures) {
 			if (figure->getAlias() == alias) {
 				cout << alias << " selected successfully!" << endl;
+				selectedFigure = figure;
 				return figure;
 			}
 		}
