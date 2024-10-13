@@ -283,35 +283,40 @@ public:
 		X = x; Y = y; X2 = x2; Y2 = y2; TYPE = "line", COLOR = color; grid = &board.getGrid();
 	};
 
-	void draw() {
-
-		string fillColor = this->getColor();
-		cout << fillColor << endl << endl << endl;
-
-		if (fillColor == "none") {
-			if (Y == Y2) {
-				int startX = min(X, X2);
-				int endX = max(X, X2);
-				for (int i = startX; i <= endX; ++i) {
-					if (i >= 0 && i < BOARD_WIDTH && Y >= 0 && Y < BOARD_HEIGHT) {
-						(*grid)[Y][i] = '*';
-					}
-				}
-			}
-			else if (X == X2) {
-				int startY = min(Y, Y2);
-				int endY = max(Y, Y2);
-				for (int i = startY; i <= endY; ++i) {
-					if (X >= 0 && X < BOARD_WIDTH && i >= 0 && i < BOARD_HEIGHT) {
-						(*grid)[i][X] = '*';
-					}
-				}
-			}
+	char checkColor() {
+		string color = this->getColor();
+		char fillColor;
+		
+		if (color == "none") {
+			return '*';
 		}
 		else {
-
+			fillColor = color[0];
+			return fillColor;
 		}
-		
+	}
+
+	void draw() {
+		char fillColor = checkColor();
+
+		if (Y == Y2) {
+			int startX = min(X, X2);
+			int endX = max(X, X2);
+			for (int i = startX; i <= endX; ++i) {
+				if (i >= 0 && i < BOARD_WIDTH && Y >= 0 && Y < BOARD_HEIGHT) {
+					(*grid)[Y][i] = fillColor;
+				}
+			}
+		}
+		else if (X == X2) {
+			int startY = min(Y, Y2);
+			int endY = max(Y, Y2);
+			for (int i = startY; i <= endY; ++i) {
+				if (X >= 0 && X < BOARD_WIDTH && i >= 0 && i < BOARD_HEIGHT) {
+					(*grid)[i][X] = fillColor;
+				}
+			}
+		}
 	}
 };
 
