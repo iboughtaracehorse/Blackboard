@@ -50,6 +50,19 @@ public:
 	virtual string getColor() {
 		return COLOR;
 	}
+
+	char checkColor() {
+		string color = this->getColor();
+		char fillColor;
+
+		if (color == "none") {
+			return '*';
+		}
+		else {
+			fillColor = color[0];
+			return fillColor;
+		}
+	}
 };
 
 struct Board {
@@ -283,21 +296,8 @@ public:
 		X = x; Y = y; X2 = x2; Y2 = y2; TYPE = "line", COLOR = color; grid = &board.getGrid();
 	};
 
-	char checkColor() {
-		string color = this->getColor();
-		char fillColor;
-		
-		if (color == "none") {
-			return '*';
-		}
-		else {
-			fillColor = color[0];
-			return fillColor;
-		}
-	}
-
 	void draw() {
-		char fillColor = checkColor();
+		char fillColor = this->checkColor();
 
 		if (Y == Y2) {
 			int startX = min(X, X2);
@@ -331,25 +331,47 @@ public:
 
 	void draw() {
 		if (HEIGHT <= 0) return;
-		for (int i = 0; i < HEIGHT; ++i) {
-			int posY = Y + i;
+		string isFilled = this->getColor();
 
-			if (posY < 0 || posY >= BOARD_HEIGHT) continue;
+		if (isFilled == "none") {
+			for (int i = 0; i < HEIGHT; ++i) {
+				int posY = Y + i;
 
-			for (int j = 0; j < HEIGHT; ++j) {
-				int posX = X + j;
+				if (posY < 0 || posY >= BOARD_HEIGHT) continue;
 
-				if (posX < 0 || posX >= BOARD_WIDTH) continue;
+				for (int j = 0; j < HEIGHT; ++j) {
+					int posX = X + j;
 
-				if (i == 0 || i == HEIGHT - 1) {
-					(*grid)[posY][posX] = '*';
-				}
+					if (posX < 0 || posX >= BOARD_WIDTH) continue;
 
-				else if (j == 0 || j == HEIGHT - 1) {
-					(*grid)[posY][posX] = '*'; // well previous method was absolutely stupid i apologize to every square i tried to create with it 
+					if (i == 0 || i == HEIGHT - 1) {
+						(*grid)[posY][posX] = '*';
+					}
+
+					else if (j == 0 || j == HEIGHT - 1) {
+						(*grid)[posY][posX] = '*';
+					}
 				}
 			}
 		}
+		else {
+			char fillColor = this->checkColor();
+
+			for (int i = 0; i < HEIGHT; ++i) {
+				int posY = Y + i;
+
+				if (posY < 0 || posY >= BOARD_HEIGHT) continue;
+
+				for (int j = 0; j < HEIGHT; ++j) {
+					int posX = X + j;
+
+					if (posX < 0 || posX >= BOARD_WIDTH) continue;
+
+					(*grid)[posY][posX] = fillColor;
+				}
+			}
+
+		}	
 	}
 };
 
@@ -364,23 +386,25 @@ public:
 	};
 
 	void draw() {
-		if (HEIGHT <= 0) return;
+		if (HEIGHT <= 0) return;		
+		char fillColor = this->checkColor();
+
 		for (int i = 0; i < HEIGHT; ++i) {
 			int leftMost = X - i;
 			int rightMost = X + i;
 			int posY = Y + i;
 			if (posY < BOARD_HEIGHT) {
 				if (leftMost >= 0 && leftMost < BOARD_WIDTH)
-					(*grid)[posY][leftMost] = '*';
+					(*grid)[posY][leftMost] = fillColor;
 				if (rightMost >= 0 && rightMost < BOARD_WIDTH && leftMost != rightMost)
-					(*grid)[posY][rightMost] = '*';
+					(*grid)[posY][rightMost] = fillColor;
 			}
 		}
 		for (int j = 0; j < 2 * HEIGHT - 1; ++j) {
 			int baseX = X - HEIGHT + 1 + j;
 			int baseY = Y + HEIGHT - 1;
 			if (baseX >= 0 && baseX < BOARD_WIDTH && baseY < BOARD_HEIGHT)
-				(*grid)[baseY][baseX] = '*';
+				(*grid)[baseY][baseX] = fillColor;
 		}
 	}
 };
