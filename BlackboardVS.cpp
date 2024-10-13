@@ -501,27 +501,27 @@ public:
 		cout << endl;
 
 		cout << "0. line" << endl;
-		cout << "   -- has four coordinates (x, y, x2, y2)" << endl;
-		cout << "   -- example: 5, 10, 9, 10" << endl;
-		cout << "     (draws a line starting at position (5,10) and ending at (9, 10). can draw only horizontal or vertical lines)" << endl;
+		cout << "   -- has four coordinates and color (x, y, x2, y2, color)" << endl;
+		cout << "   -- example: 5, 10, 9, 10, green" << endl;
+		cout << "     (draws a green line starting at position (5,10) and ending at (9, 10). can draw only horizontal or vertical lines)" << endl;
 		cout << endl;
 		
 		cout << "1. triangle" << endl;
-		cout << "   -- has two coordinates (x, y) and height" << endl;
-		cout << "   -- example: 5, 10, 9" << endl;
-		cout << "     (draws a triangle starting at position (5,10) with a height of 9)" << endl;
+		cout << "   -- has two coordinates (x, y), height, and color" << endl;
+		cout << "   -- example: 5, 10, 9, green" << endl;
+		cout << "     (draws a green triangle starting at position (5,10) with a height of 9)" << endl;
 		cout << endl;
 
 		cout << "2. square" << endl;
-		cout << "   -- has two coordinates (x, y) and height" << endl;
-		cout << "   -- example: 10, 20, 10" << endl;
-		cout << "     (draws a square starting at position (10,20) with a height of 10)" << endl;
+		cout << "   -- has two coordinates (x, y), height, and color" << endl;
+		cout << "   -- example: 10, 20, 10, green" << endl;
+		cout << "     (draws a green square starting at position (10,20) with a height of 10)" << endl;
 		cout << endl;
 		
 		cout << "3. circle" << endl;
-		cout << "   -- has two coordinates (x, y) and height (diameter)" << endl;
-		cout << "   -- example: 10, 20, 10" << endl;
-		cout << "     (draws a circle starting at position (10,20) with a diameter of 10)" << endl;
+		cout << "   -- has two coordinates (x, y), height (diameter), and color" << endl;
+		cout << "   -- example: 10, 20, 10, green" << endl;
+		cout << "     (draws a green circle starting at position (10,20) with a diameter of 10)" << endl;
 		cout << endl;
 
 		cout << " | available commands:" << endl;
@@ -531,27 +531,31 @@ public:
 		cout << "   -- description: prints help. you've just used it bfr" << endl;
 		cout << endl;
 
-		cout << "1. print" << endl;
+		cout << "1. add" << endl;
+		cout << "   -- description: allows to add a new figure" << endl;
+		cout << endl;
+		
+		cout << "2. print" << endl;
 		cout << "   -- description: prints board to console" << endl;
 		cout << endl;
 
-		cout << "2. list" << endl;
+		cout << "3. list" << endl;
 		cout << "   -- description: lists all added figures in text format with coordinates" << endl;
 		cout << endl;
 
-		cout << "3. undo" << endl;
+		cout << "4. undo" << endl;
 		cout << "   -- description: deletes the last figure from the board" << endl;
 		cout << endl;
 
-		cout << "4. clear" << endl;
+		cout << "5. clear" << endl;
 		cout << "   -- description: clears the board" << endl;
 		cout << endl;
 		
-		cout << "5. save" << endl;
+		cout << "6. save" << endl;
 		cout << "   -- description: saves the board to the chosen file" << endl;
 		cout << endl;
 
-		cout << "6. exit" << endl;
+		cout << "7. exit" << endl;
 		cout << "   -- description: exit the program, yu will lost all the progress" << endl;
 		cout << endl;
 
