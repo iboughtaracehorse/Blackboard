@@ -442,18 +442,41 @@ public:
 	void draw() {
 		if (HEIGHT <= 0) return;
 
-		int diameter = HEIGHT;
-		int radius = diameter / 2;
+		string isFilled = this->getColor();
 
-		for (int i = 0; i <= diameter; ++i) {
-			for (int j = 0; j <= diameter; j++) {
-				double centreDistance = sqrt((i - radius) * (i - radius) + (j - radius) * (j - radius));
+		if (isFilled == "none") {
+			int diameter = HEIGHT;
+			int radius = diameter / 2;
 
-				if (centreDistance >= radius - 0.5 && centreDistance <= radius + 0.5) {
-					int posX = X + j;
-					int posY = Y + i;
-					if (posX >= 0 && posX < BOARD_WIDTH && posY < BOARD_HEIGHT) {
-						(*grid)[posX][posY] = '*';
+			for (int i = 0; i <= diameter; ++i) {
+				for (int j = 0; j <= diameter; j++) {
+					double centreDistance = sqrt((i - radius) * (i - radius) + (j - radius) * (j - radius));
+
+					if (centreDistance >= radius - 0.5 && centreDistance <= radius + 0.5) {
+						int posX = X + j;
+						int posY = Y + i;
+						if (posX >= 0 && posX < BOARD_WIDTH && posY < BOARD_HEIGHT) {
+							(*grid)[posX][posY] = '*';
+						}
+					}
+				}
+			}
+		}
+		else {
+			char fillColor = this->checkColor();
+			int diameter = HEIGHT;
+			int radius = diameter / 2;
+
+			for (int i = 0; i <= diameter; ++i) {
+				for (int j = 0; j <= diameter; j++) {
+					double centreDistance = sqrt((i - radius) * (i - radius) + (j - radius) * (j - radius));
+
+					if (centreDistance <= radius + 0.5) { //chatGPT helped me with this math thing
+						int posX = X + j;
+						int posY = Y + i;
+						if (posX >= 0 && posX < BOARD_WIDTH && posY >= 0 && posY < BOARD_HEIGHT) {
+							(*grid)[posX][posY] = fillColor;
+						}
 					}
 				}
 			}
