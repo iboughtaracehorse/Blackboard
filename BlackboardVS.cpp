@@ -13,7 +13,6 @@ vector<vector<char>> grid;
 
 struct Board;
 
-
 class Figure {
 
 protected:
@@ -58,6 +57,7 @@ public:
 	virtual string getAlias() {
 		return ALIAS;
 	}
+	virtual void listSpecific() {}
 
 	char checkColor() {
 		string color = this->getColor();
@@ -119,6 +119,14 @@ public:
 	int getY2() {
 		return Y2;
 	}
+	void listSpecific() {
+		cout << ALIAS
+			<< TYPE
+			<< COLOR
+			<< X << Y << X2 << Y2
+			<< HEIGHT << endl;
+	}
+	
 };
 
 class Square : public Figure {
@@ -174,6 +182,14 @@ public:
 
 		}
 	}
+
+	void listSpecific() {
+		cout << ALIAS
+			<< TYPE
+			<< COLOR
+			<< X << Y
+			<< HEIGHT << endl;
+	}
 };
 
 class Triangle : public Figure {
@@ -228,6 +244,14 @@ public:
 				}
 			}
 		}
+	}
+
+	void listSpecific() {
+		cout << ALIAS
+			<< TYPE
+			<< COLOR
+			<< X << Y
+			<< HEIGHT << endl;
 	}
 };
 
@@ -285,6 +309,13 @@ public:
 		}
 	}
 
+	void listSpecific() {
+		cout << ALIAS
+			<< TYPE
+			<< COLOR
+			<< X << Y
+			<< HEIGHT << endl;
+	}
 };
 
 struct Board {
@@ -549,14 +580,13 @@ struct Board {
 		return selectedFigure;
 	}
 
+	void showSelected() {
+		selectedFigure->listSpecific();
+	}
+
 	void remove(Figure* figure) {
 		selectedFigure = nullptr;
-
-		if (!selectedFigure) {
-			cout << "oops! looks like you havent selected anything yet!" << endl;
-			return;
-		}
-
+	
 		auto i = find(figures.begin(), figures.end(), figure); //int didnt workout
 
 		if (i != figures.end()) {
@@ -566,11 +596,6 @@ struct Board {
 	}
 
 	void repaint(Figure* figure, string color) {
-
-		if (!selectedFigure) {
-			cout << "oops! looks like you havent selected anything yet!" << endl;
-			return;
-		}
 
 		figure->setColor(color);
 	}
@@ -700,7 +725,7 @@ public:
 			board.repaint(board.getSelected(), askForColor());
 		}
 		else if (command == "edit") {
-			board.repaint(board.getSelected(), askForColor());
+			board.edit(board.getSelected());
 		}
 		else if (command == "load") {
 			cout << "NOT IMPLEMENTED" << endl;
@@ -803,12 +828,27 @@ public:
 		}
 	}
 
-	string askForColor() {
-		string input;
-		cout << "enter new color: ";
+	bool isSelected() {
+		if (!board.selectedFigure) {
+			cout << "oops! looks like you havent selected anything yet!" << endl;
+			return false;
+		}
+		return true;
+	}
 
-		getline(cin, input);
-		return input;
+	string askForColor() {
+
+		if (isSelected()) {
+
+			board.showSelected();
+
+			string input;
+			cout << "enter new color: ";
+
+			getline(cin, input);
+			return input;
+		}
+		return "";
 	}
 
 	bool deletionWarning() {
