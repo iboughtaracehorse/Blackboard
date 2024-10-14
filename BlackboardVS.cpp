@@ -78,6 +78,7 @@ public:
 	void editHeight(int coefficient) {
 		this->HEIGHT *= coefficient;
 	}
+	virtual void editCoordinates() = 0;
 };
 
 class Line : public Figure {
@@ -127,6 +128,13 @@ public:
 			<< COLOR << " "
 			<< X << " " << Y << " " << X2 << " " << Y2 << " "
 			<< HEIGHT << endl;
+	}
+
+	void editCoordinates(int newX, int newY, int newX2, int newY2) {
+		this->X = newX;
+		this->X2 = newX2;
+		this->Y = newY;
+		this->Y2 = newY2;
 	}
 	
 };
@@ -190,6 +198,11 @@ public:
 			<< X << " " << Y << " "
 			<< HEIGHT << endl;
 	}
+
+	void editCoordinates(int newX, int newY) {
+		this->X = newX;
+		this->Y = newY;
+	}
 };
 
 class Triangle : public Figure {
@@ -251,6 +264,11 @@ public:
 			<< X << " " << Y << " "
 			<< HEIGHT << endl;
 	}
+
+	void editCoordinates(int newX, int newY) {
+		this->X = newX;
+		this->Y = newY;
+	}
 };
 
 class Circle : public Figure {
@@ -310,6 +328,11 @@ public:
 			<< COLOR << " "
 			<< X << " " << Y << " "
 			<< HEIGHT << endl;
+	}
+
+	void editCoordinates(int newX, int newY) {
+		this->X = newX;
+		this->Y = newY;
 	}
 };
 
@@ -476,7 +499,7 @@ struct Board {
 
 		file.close();
 		cout << "saved successfully!!" << endl;
-	}
+	} // DO WITH LIST
 
 	/*void load() {
 		string directory;
@@ -599,6 +622,16 @@ struct Board {
 	void edit(Figure* figure, int coefficient) {
 		figure->editHeight(coefficient);
 		cout << "height multiplied by: " << coefficient << endl;
+	}
+
+	void move(Figure* figure) {
+		if (Line* line = dynamic_cast<Line*>(figure)) {
+			int newX;
+			int newY;
+			int newX2;
+			int newY2;
+			figure->editCoordinates(newX, newY, newX2, newY2);
+		}
 	}
 };
 
