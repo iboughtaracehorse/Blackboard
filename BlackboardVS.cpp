@@ -116,14 +116,16 @@ public:
 	int getX2() {
 		return X2;
 	}
+
 	int getY2() {
 		return Y2;
 	}
+
 	void listSpecific() {
-		cout << ALIAS
-			<< TYPE
-			<< COLOR
-			<< X << Y << X2 << Y2
+		cout << ALIAS << " " 
+			<< TYPE << " "
+			<< COLOR << " "
+			<< X << " " << Y << " " << X2 << " " << Y2 << " "
 			<< HEIGHT << endl;
 	}
 	
@@ -184,10 +186,10 @@ public:
 	}
 
 	void listSpecific() {
-		cout << ALIAS
-			<< TYPE
-			<< COLOR
-			<< X << Y
+		cout << ALIAS << " "
+			<< TYPE << " "
+			<< COLOR << " "
+			<< X << " " << Y << " "
 			<< HEIGHT << endl;
 	}
 };
@@ -247,10 +249,10 @@ public:
 	}
 
 	void listSpecific() {
-		cout << ALIAS
-			<< TYPE
-			<< COLOR
-			<< X << Y
+		cout << ALIAS << " "
+			<< TYPE << " "
+			<< COLOR << " "
+			<< X << " " << Y << " "
 			<< HEIGHT << endl;
 	}
 };
@@ -310,10 +312,10 @@ public:
 	}
 
 	void listSpecific() {
-		cout << ALIAS
-			<< TYPE
-			<< COLOR
-			<< X << Y
+		cout << ALIAS << " "
+			<< TYPE << " "
+			<< COLOR << " "
+			<< X << " " << Y << " "
 			<< HEIGHT << endl;
 	}
 };
@@ -581,6 +583,7 @@ struct Board {
 	}
 
 	void showSelected() {
+		cout << "currently selected: ";
 		selectedFigure->listSpecific();
 	}
 
