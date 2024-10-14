@@ -71,6 +71,10 @@ public:
 			return fillColor;
 		}
 	}
+	
+	void setColor(string color) {
+		this->COLOR = color;
+	}
 };
 
 class Line : public Figure {
@@ -553,6 +557,10 @@ struct Board {
 			cout << "selected figure removed successfully! nothing is selected now" << endl;
 		}
 	}
+
+	void repaint(Figure* figure, string color) {
+		figure->setColor(color);
+	}
 };
 
 
@@ -671,6 +679,9 @@ public:
 		else if (command == "remove") {
 			board.remove(board.getSelected());
 		}
+		else if (command == "repaint") {
+			board.repaint(board.getSelected(), askForColor());
+		}
 		else if (command == "load") {
 			cout << "NOT IMPLEMENTED" << endl;
 			//board.load();
@@ -770,6 +781,14 @@ public:
 			board.addFigure(circle);
 			cout << "new circle named " << alias << " was added!" << endl;
 		}
+	}
+
+	string askForColor() {
+		string input;
+		cout << "enter new color: ";
+
+		getline(cin, input);
+		return input;
 	}
 
 	bool deletionWarning() {
