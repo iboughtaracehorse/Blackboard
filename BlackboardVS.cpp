@@ -12,8 +12,6 @@ const int BOARD_HEIGHT = 25;
 
 vector<vector<char>> grid(BOARD_HEIGHT, vector<char>(BOARD_WIDTH, ' '));
 
-struct Board;
-
 class Figure {
 
 protected:
@@ -89,7 +87,7 @@ class Line : public Figure {
 
 public:
 	Line(int x, int y, int x2, int y2, string color, string alias) : Figure() {
-		X = x; Y = y; X2 = x2; Y2 = y2; TYPE = "line", COLOR = color, ALIAS = alias;
+		X = x; Y = y; X2 = x2; Y2 = y2; TYPE = "Line", COLOR = color, ALIAS = alias;
 	};
 
 	void draw(vector<vector<char>>& grid) {
@@ -133,16 +131,14 @@ public:
 	
 };
 
-/*class Square : public Figure {
-
-	vector<vector<char>>& grid;
+class Square : public Figure {
 
 public:
-	Square(Board& board, int x, int y, int height, string color, string alias) : Figure(board), grid(grid) {
-		X = x; Y = y; HEIGHT = height, TYPE = "square", COLOR = color, ALIAS = alias;
+	Square(int x, int y, int height, string color, string alias) : Figure() {
+		X = x; Y = y; HEIGHT = height, TYPE = "Square", COLOR = color, ALIAS = alias;
 	};
 
-	void draw() {
+	void draw(vector<vector<char>>& grid) {
 		if (HEIGHT <= 0) return;
 		string isFilled = this->getColor();
 
@@ -196,7 +192,7 @@ public:
 	}
 };
 
-class Triangle : public Figure {
+/*class Triangle : public Figure {
 
 	vector<vector<char>>& grid;
 
