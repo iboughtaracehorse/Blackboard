@@ -366,7 +366,7 @@ struct Board {
 		}
 	}
 
-	/*void list() {
+	void list() {
 		if (figures.empty()) {
 			cout << endl << "oops! your board must be empty! try 'add' to add new figures!" << endl << endl;
 			return;
@@ -390,7 +390,7 @@ struct Board {
 					<< " diameter: " << circle->getHeight() << " and color: " << circle->getColor() << endl;
 			}
 		}
-	}*/
+	}
 
 	void undo() {
 		if (figures.empty()) {
@@ -602,7 +602,6 @@ struct Board {
 	}
 };
 
-
 class Help {
 
 public:
@@ -696,9 +695,9 @@ public:
 			board.drawFigures();
 			board.print(cout);
 		}
-		/*else if (command == "list") {
+		else if (command == "list") {
 			board.list();
-		}*/
+		}
 		else if (command == "add") {
 			//addFigure();
 		}
