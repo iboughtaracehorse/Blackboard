@@ -729,10 +729,14 @@ public:
 			board.remove(board.getSelected());
 		}
 		else if (command == "repaint") {
-			board.repaint(board.getSelected(), askForColor());
+			if (isSelected()) {
+				board.repaint(board.getSelected(), askForColor());
+			}
 		}
 		else if (command == "edit") {
-			board.edit(board.getSelected(), askForCoefficient());
+			if (isSelected()) {
+				board.edit(board.getSelected(), askForCoefficient());
+			}
 		}
 		else if (command == "load") {
 			cout << "NOT IMPLEMENTED" << endl;
@@ -844,35 +848,24 @@ public:
 	}
 
 	string askForColor() {
+		board.showSelected();
 
-		if (isSelected()) {
+		string input;
+		cout << "enter new color: ";
 
-			board.showSelected();
-
-			string input;
-			cout << "enter new color: ";
-
-			getline(cin, input);
-			return input;
-		}
-		return "";
+		getline(cin, input);
+		return input;
 	}
 
 	int askForCoefficient() {
+		board.showSelected();
 
-		if (isSelected()) {
+		int input;
+		cout << "enter the coefficient: ";
+		cin >> input;
+		cin.ignore();
 
-			board.showSelected();
-
-			int input;
-			cout << "enter the coefficient: ";
-			cin >> input;
-			cin.ignore();
-
-			return input;
-		}
-		return 1;
-
+		return input;
 	}
 
 	bool deletionWarning() {
