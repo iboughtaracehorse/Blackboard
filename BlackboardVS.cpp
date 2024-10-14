@@ -192,17 +192,15 @@ public:
 	}
 };
 
-/*class Triangle : public Figure {
-
-	vector<vector<char>>& grid;
+class Triangle : public Figure {
 
 public:
 
-	Triangle(Board& board, int x, int y, int height, string color, string alias) : Figure(board), grid(grid) {
-		X = x; Y = y; HEIGHT = height, TYPE = "triangle"; COLOR = color, ALIAS = alias;
+	Triangle(int x, int y, int height, string color, string alias) : Figure() {
+		X = x; Y = y; HEIGHT = height, TYPE = "Triangle"; COLOR = color, ALIAS = alias;
 	};
 
-	void draw() {
+	void draw(vector<vector<char>>& grid) {
 		if (HEIGHT <= 0) return;
 
 		string isFilled = this->getColor();
@@ -257,15 +255,12 @@ public:
 
 class Circle : public Figure {
 
-	vector<vector<char>>& grid;
-
-
 public:
-	Circle(Board& board, int x, int y, int height, string color, string alias) : Figure(board), grid(grid) {
+	Circle(int x, int y, int height, string color, string alias) : Figure() {
 		X = x; Y = y; HEIGHT = height, TYPE = "circle", COLOR = color, ALIAS = alias;
 	};
 
-	void draw() {
+	void draw(vector<vector<char>>& grid) {
 		if (HEIGHT <= 0) return;
 
 		string isFilled = this->getColor();
@@ -316,7 +311,7 @@ public:
 			<< X << " " << Y << " "
 			<< HEIGHT << endl;
 	}
-};*/
+};
 
 struct Board {
 
