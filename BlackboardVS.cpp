@@ -699,7 +699,7 @@ public:
 			board.list();
 		}
 		else if (command == "add") {
-			//addFigure();
+			addFigure();
 		}
 		else if (command == "undo") {
 			board.undo();
@@ -739,7 +739,7 @@ public:
 		}
 	}
 
-	/*void addFigure() {
+	void addFigure() {
 		cout << "so you want to add a new figure... great! here are your options: " << endl;
 		cout << "0. line" << endl;
 		cout << "1. triangle" << endl;
@@ -780,7 +780,7 @@ public:
 			cin.ignore();
 
 			if (x == x2 || y == y2) {
-				Line* line = new Line(board, x, y, x2, y2, color, alias);
+				Line* line = new Line(x, y, x2, y2, color, alias);
 				board.addFigure(line);
 				cout << "new line named " << alias << " was added!" << endl;
 			}
@@ -797,7 +797,7 @@ public:
 			cin.ignore();
 
 
-			Triangle* triangle = new Triangle(board, x, y, height, color, alias);
+			Triangle* triangle = new Triangle(x, y, height, color, alias);
 			board.addFigure(triangle);
 			cout << "new triangle named " << alias << " was added!" << endl;
 		}
@@ -809,7 +809,7 @@ public:
 			cin.ignore();
 
 
-			Square* square = new Square(board, x, y, height, color, alias);
+			Square* square = new Square(x, y, height, color, alias);
 			board.addFigure(square);
 			cout << "new square named " << alias << " was added!" << endl;
 		}
@@ -822,11 +822,11 @@ public:
 			cin.ignore();
 
 
-			Circle* circle = new Circle(board, x, y, height, color, alias);
+			Circle* circle = new Circle(x, y, height, color, alias);
 			board.addFigure(circle);
 			cout << "new circle named " << alias << " was added!" << endl;
 		}
-	}*/
+	}
 
 	bool isSelected() {
 		if (!board.selectedFigure) {
