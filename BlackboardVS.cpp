@@ -74,7 +74,10 @@ public:
 	
 	void setColor(string color) {
 		this->COLOR = color;
-		cout << "color changed to: " << color << endl;
+	}
+
+	void editHeight(int coefficient) {
+		this->HEIGHT *= coefficient;
 	}
 };
 
@@ -599,12 +602,13 @@ struct Board {
 	}
 
 	void repaint(Figure* figure, string color) {
-
 		figure->setColor(color);
+		cout << "color changed to: " << color << endl;
 	}
 
-	void edit(Figure* figure) {
-
+	void edit(Figure* figure, int coefficient) {
+		figure->editHeight(coefficient);
+		cout << "height multiplied by: " << coefficient << endl;
 	}
 };
 
@@ -728,7 +732,7 @@ public:
 			board.repaint(board.getSelected(), askForColor());
 		}
 		else if (command == "edit") {
-			board.edit(board.getSelected());
+			board.edit(board.getSelected(), askForCoefficient());
 		}
 		else if (command == "load") {
 			cout << "NOT IMPLEMENTED" << endl;
@@ -852,6 +856,23 @@ public:
 			return input;
 		}
 		return "";
+	}
+
+	int askForCoefficient() {
+
+		if (isSelected()) {
+
+			board.showSelected();
+
+			int input;
+			cout << "enter the coefficient: ";
+			cin >> input;
+			cin.ignore();
+
+			return input;
+		}
+		return 1;
+
 	}
 
 	bool deletionWarning() {
