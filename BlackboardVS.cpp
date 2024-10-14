@@ -74,6 +74,7 @@ public:
 	
 	void setColor(string color) {
 		this->COLOR = color;
+		cout << "color changed to: " << color << endl;
 	}
 };
 
@@ -551,7 +552,13 @@ struct Board {
 	void remove(Figure* figure) {
 		selectedFigure = nullptr;
 
+		if (!selectedFigure) {
+			cout << "oops! looks like you havent selected anything yet!" << endl;
+			return;
+		}
+
 		auto i = find(figures.begin(), figures.end(), figure); //int didnt workout
+
 		if (i != figures.end()) {
 			figures.erase(i);
 			cout << "selected figure removed successfully! nothing is selected now" << endl;
@@ -559,7 +566,17 @@ struct Board {
 	}
 
 	void repaint(Figure* figure, string color) {
+
+		if (!selectedFigure) {
+			cout << "oops! looks like you havent selected anything yet!" << endl;
+			return;
+		}
+
 		figure->setColor(color);
+	}
+
+	void edit(Figure* figure) {
+
 	}
 };
 
@@ -680,6 +697,9 @@ public:
 			board.remove(board.getSelected());
 		}
 		else if (command == "repaint") {
+			board.repaint(board.getSelected(), askForColor());
+		}
+		else if (command == "edit") {
 			board.repaint(board.getSelected(), askForColor());
 		}
 		else if (command == "load") {
