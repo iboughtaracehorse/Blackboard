@@ -9,7 +9,8 @@ using namespace std;
 
 const int BOARD_WIDTH = 80;
 const int BOARD_HEIGHT = 25;
-vector<vector<char>> grid;
+
+vector<vector<char>> grid(BOARD_HEIGHT, vector<char>(BOARD_WIDTH, ' '));
 
 struct Board;
 
@@ -25,9 +26,9 @@ protected:
 
 public:
 
-	Figure(Board& board) { X = 0; Y = 0; HEIGHT = 0; COLOR = "none"; ALIAS = ""; }
+	Figure() { X = 0; Y = 0; HEIGHT = 0; COLOR = "none"; ALIAS = ""; }
 
-	virtual void draw() = 0;
+	virtual void draw(vector<vector<char>>& grid) = 0;
 
 	virtual ~Figure() {};
 
@@ -83,17 +84,15 @@ public:
 
 class Line : public Figure {
 
-	vector<vector<char>>& grid;
-
 	int X2;
 	int Y2;
 
 public:
-	Line(Board& board, int x, int y, int x2, int y2, string color, string alias) : Figure(board), grid(grid) {
+	Line(int x, int y, int x2, int y2, string color, string alias) : Figure() {
 		X = x; Y = y; X2 = x2; Y2 = y2; TYPE = "line", COLOR = color, ALIAS = alias;
 	};
 
-	void draw() {
+	void draw(vector<vector<char>>& grid) {
 		char fillColor = this->checkColor();
 
 		if (Y == Y2) {
@@ -134,7 +133,7 @@ public:
 	
 };
 
-class Square : public Figure {
+/*class Square : public Figure {
 
 	vector<vector<char>>& grid;
 
@@ -321,7 +320,7 @@ public:
 			<< X << " " << Y << " "
 			<< HEIGHT << endl;
 	}
-};
+};*/
 
 struct Board {
 
@@ -372,11 +371,11 @@ struct Board {
 	void drawFigures() {
 		clear();
 		for (Figure* figure : figures) {
-			figure->draw();
+			figure->draw(grid);
 		}
 	}
 
-	void list() {
+	/*void list() {
 		if (figures.empty()) {
 			cout << endl << "oops! your board must be empty! try 'add' to add new figures!" << endl << endl;
 			return;
@@ -400,7 +399,7 @@ struct Board {
 					<< " diameter: " << circle->getHeight() << " and color: " << circle->getColor() << endl;
 			}
 		}
-	}
+	}*/
 
 	void undo() {
 		if (figures.empty()) {
@@ -706,11 +705,11 @@ public:
 			board.drawFigures();
 			board.print(cout);
 		}
-		else if (command == "list") {
+		/*else if (command == "list") {
 			board.list();
-		}
+		}*/
 		else if (command == "add") {
-			addFigure();
+			//addFigure();
 		}
 		else if (command == "undo") {
 			board.undo();
@@ -750,7 +749,7 @@ public:
 		}
 	}
 
-	void addFigure() {
+	/*void addFigure() {
 		cout << "so you want to add a new figure... great! here are your options: " << endl;
 		cout << "0. line" << endl;
 		cout << "1. triangle" << endl;
@@ -837,7 +836,7 @@ public:
 			board.addFigure(circle);
 			cout << "new circle named " << alias << " was added!" << endl;
 		}
-	}
+	}*/
 
 	bool isSelected() {
 		if (!board.selectedFigure) {
