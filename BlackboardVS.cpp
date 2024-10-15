@@ -576,7 +576,7 @@ struct Board {
 		}
 	}*/
 
-	Figure* select() {
+	Figure* select(stringstream& ss) {
 
 		if (figures.empty()) {
 			cout << "nothing on the board yet!" << endl;
@@ -584,9 +584,7 @@ struct Board {
 		}
 
 		string alias;
-		cout << "what figure would you like to select? (write alias only): ";
-		cin >> alias;
-		cin.ignore();
+		ss >> alias;
 
 		for (auto& figure : figures) {
 			if (figure->getAlias() == alias) {
@@ -771,14 +769,14 @@ public:
 			board.save();
 		}
 		else if (command == "select") {
-			board.select();
+			board.select(ss);
 		}
 		else if (command == "remove") {
 			board.remove(board.getSelected());
 		}
 		else if (command == "repaint") {
 			if (isSelected()) {
-				board.repaint(board.getSelected(), askForColor());
+				board.repaint(board.getSelected(), askForColor(ss));
 			}
 		}
 		else if (command == "edit") {
@@ -858,14 +856,13 @@ public:
 		return true;
 	}
 
-	string askForColor() {
+	string askForColor(stringstream& ss) {
 		board.showSelected();
 
-		string input;
-		cout << "enter new color: ";
+		string color;
+		ss >> color;
 
-		getline(cin, input);
-		return input;
+		return color;
 	}
 
 	int askForCoefficient() {
