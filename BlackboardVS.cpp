@@ -627,29 +627,27 @@ struct Board {
 		cout << "height multiplied by: " << coefficient << endl;
 	}
 
-	void move(Figure* figure) {
+	void move(Figure* figure, stringstream& ss) {
 		if (Line* line = dynamic_cast<Line*>(figure)) {
 			int newX;
 			int newY;
 			int newX2;
 			int newY2;
-			cout << "enter new coordinates: ";
-			cin >> newX >> newY >> newX2 >> newY2;
-			cin.ignore();
+			ss >> newX >> newY >> newX2 >> newY2;
 
 			figure->editCoordinates(newX, newY, newX2, newY2);
+			cout << "moved successfully" << endl;
 		}
 		else {
 			int newX;
 			int newY;
-			cout << "enter new coordinates: ";
-			cin >> newX >> newY;
-			cin.ignore();
+			ss >> newX >> newY;
 
 			figure->editCoordinates(newX, newY, 0, 0);
+			cout << "moved successfully" << endl;
 		}
 	}
-};
+}; 
 
 class Help {
 
@@ -781,12 +779,12 @@ public:
 		}
 		else if (command == "edit") {
 			if (isSelected()) {
-				board.edit(board.getSelected(), askForCoefficient());
+				board.edit(board.getSelected(), askForCoefficient(ss));
 			}
 		}
 		else if (command == "move") {
 			if (isSelected()) {
-				board.move(board.getSelected());
+				board.move(board.getSelected(), ss);
 			}
 		}
 		else if (command == "load") {
@@ -865,13 +863,11 @@ public:
 		return color;
 	}
 
-	int askForCoefficient() {
+	int askForCoefficient(stringstream& ss) {
 		board.showSelected();
 
 		int input;
-		cout << "enter the coefficient: ";
-		cin >> input;
-		cin.ignore();
+		ss >> input;
 
 		return input;
 	}
