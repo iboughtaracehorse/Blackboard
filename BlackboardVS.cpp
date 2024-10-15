@@ -505,7 +505,7 @@ struct Board {
 		cout << "saved successfully!!" << endl;
 	} // DO WITH LIST
 
-	/*void load() {
+	void load() {
 		string directory;
 		string filename;
 
@@ -553,27 +553,33 @@ struct Board {
 		string currentLine;
 
 		while (getline(file, currentLine)) {
-			string type = "";
+			string type, alias;
 			stringstream ss(currentLine);
-			ss >> type;
+			ss >> type >> alias;
 
 			if (type == "line") {
 				int x, y, x2, y2;
-				Line* line = new Line(*this, x, y, x2, y2);
+				string color;
+				ss >> x >> y >> x2 >> y2 >> color;
+				Line* line = new Line(x, y, x2, y2, color, alias);
 				addFigure(line);
 			}
 			else if (type == "triangle") {
 				int x, y, height;
-				Triangle* triangle = new Triangle(*this, x, y, height);
+				string color;
+				ss >> x >> y >> height >> color;
+				Triangle* triangle = new Triangle(x, y, height, color, alias);
 				addFigure(triangle);
 			}
-			if (type == "square") {
+			else if (type == "square") {
 				int x, y, height;
-				Square* square = new Square(*this, x, y, height);
+				string color;
+				ss >> x >> y >> height >> color;
+				Square* square = new Square(x, y, height, color, alias);
 				addFigure(square);
 			}
 		}
-	}*/
+	}
 
 	Figure* select(stringstream& ss) {
 
@@ -809,8 +815,7 @@ public:
 			}
 		}
 		else if (command == "load") {
-			cout << "NOT IMPLEMENTED" << endl;
-			//board.load();
+			board.load();
 		}
 		else if (command == "help") {
 			help.help();
