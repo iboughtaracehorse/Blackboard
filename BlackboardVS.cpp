@@ -78,7 +78,7 @@ public:
 	void editHeight(int coefficient) {
 		this->HEIGHT *= coefficient;
 	}
-	virtual void editCoordinates() = 0;
+	virtual void editCoordinates(int newX, int newY, int newX2, int newY2) = 0;
 };
 
 class Line : public Figure {
@@ -131,10 +131,15 @@ public:
 	}
 
 	void editCoordinates(int newX, int newY, int newX2, int newY2) {
-		this->X = newX;
-		this->X2 = newX2;
-		this->Y = newY;
-		this->Y2 = newY2;
+		if (X == X2 || Y == Y2) {
+			this->X = newX;
+			this->X2 = newX2;
+			this->Y = newY;
+			this->Y2 = newY2;
+		}
+		else {
+			cout << "invalid coordinates. check 'help' and try again" << endl;
+		}
 	}
 	
 };
@@ -199,7 +204,7 @@ public:
 			<< HEIGHT << endl;
 	}
 
-	void editCoordinates(int newX, int newY) {
+	void editCoordinates(int newX, int newY, int newX2, int newY2) {
 		this->X = newX;
 		this->Y = newY;
 	}
@@ -265,7 +270,7 @@ public:
 			<< HEIGHT << endl;
 	}
 
-	void editCoordinates(int newX, int newY) {
+	void editCoordinates(int newX, int newY, int newX2, int newY2) {
 		this->X = newX;
 		this->Y = newY;
 	}
@@ -330,7 +335,7 @@ public:
 			<< HEIGHT << endl;
 	}
 
-	void editCoordinates(int newX, int newY) {
+	void editCoordinates(int newX, int newY, int newX2, int newY2) {
 		this->X = newX;
 		this->Y = newY;
 	}
@@ -630,7 +635,17 @@ struct Board {
 			int newY;
 			int newX2;
 			int newY2;
+			cout << "enter new coordinates: ";
+			cin >> newX >> newY >> newX2 >> newY2;
+
 			figure->editCoordinates(newX, newY, newX2, newY2);
+		}
+		else {
+			int newX;
+			int newY;
+			cout << "enter new coordinates: ";
+			cin >> newX >> newY;
+			figure->editCoordinates(newX, newY, 0, 0);
 		}
 	}
 };
@@ -758,6 +773,11 @@ public:
 		else if (command == "edit") {
 			if (isSelected()) {
 				board.edit(board.getSelected(), askForCoefficient());
+			}
+		}
+		else if (command == "move") {
+			if (isSelected()) {
+				board.move(board.getSelected());
 			}
 		}
 		else if (command == "load") {
