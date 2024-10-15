@@ -394,28 +394,28 @@ struct Board {
 		}
 	}
 
-	void list() {
-		if (figures.empty()) {
+	void list(ostream& target) {
+		if (isEmpty()) {
 			cout << endl << "oops! your board must be empty! try 'add' to add new figures!" << endl << endl;
 			return;
 		}
 
 		for (auto& figure : figures) {
 			if (Line* line = dynamic_cast<Line*>(figure)) {
-				cout << "Line named " << line->getAlias() << " , with coordinates: " << line->getX() << " " << line->getY()
-					<< " " << line->getX2() << " " << line->getY2() << " and color: " << line->getColor() << endl;
+				target << "Line " << line->getAlias() << " " << line->getX() << " " << line->getY()
+					<< " " << line->getX2() << " " << line->getY2() << " " << line->getColor() << endl;
 			}
 			else if (Triangle* triangle = dynamic_cast<Triangle*>(figure)) {
-				cout << "Triangle named " << triangle->getAlias() << " , with coordinates: " << triangle->getX() << " " << triangle->getY()
-					<< " height: " << triangle->getHeight() << " and color: " << triangle->getColor() << endl;
+				target << "Triangle " << triangle->getAlias() << " " << triangle->getX() << " " << triangle->getY()
+					<< " " << triangle->getHeight() << " " << triangle->getColor() << endl;
 			}
 			else if (Square* square = dynamic_cast<Square*>(figure)) {
-				cout << "Square named " << square->getAlias() << " , with coordinates: " << square->getX() << " " << square->getY()
-					<< " height: " << square->getHeight() << " and color: " << square->getColor() << endl;
+				target << "Square " << square->getAlias() << " " << square->getX() << " " << square->getY()
+					<< " " << square->getHeight() << " " << square->getColor() << endl;
 			}
 			else if (Circle* circle = dynamic_cast<Circle*>(figure)) {
-				cout << "Circle named " << circle->getAlias() << " , with coordinates: " << circle->getX() << " " << circle->getY()
-					<< " diameter: " << circle->getHeight() << " and color: " << circle->getColor() << endl;
+				target << "Circle " << circle->getAlias() << " " << circle->getX() << " " << circle->getY()
+					<< " " << circle->getHeight() << " " << circle->getColor() << endl;
 			}
 		}
 	}
@@ -474,6 +474,11 @@ struct Board {
 		string filename;
 		ofstream file;
 
+		if (isEmpty()) {
+			cout << endl << "oops! your board must be empty! try 'add' to add new figures!" << endl << endl;
+			return;
+		}
+
 		cout << "enter a full directory (with filename) to save the file in (ot 'this' to save in the current directory): ";
 		getline(cin, directory);
 
@@ -488,13 +493,7 @@ struct Board {
 		}
 
 		if (file.is_open()) {
-			for (auto figure : figures) {
-				file << figure->getType() << " "
-					<< figure->getX() << " "
-					<< figure->getY() << " "
-					<< figure->getHeight() << " "
-					<< figure->getColor() << endl;
-			}
+			list(file);
 		}
 
 		else {
@@ -773,7 +772,7 @@ public:
 			board.print(cout);
 		}
 		else if (command == "list") {
-			board.list();
+			board.list(cout);
 		}
 		else if (command == "add") {
 			addFigure(ss);
