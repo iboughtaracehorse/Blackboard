@@ -635,6 +635,11 @@ struct Board {
 			int newY2;
 			ss >> newX >> newY >> newX2 >> newY2;
 
+			if (ss.fail() || !ss.eof()) {
+				cout << "error occured. invalid coordinates" << endl;
+				return;
+			}
+
 			figure->editCoordinates(newX, newY, newX2, newY2);
 			cout << "moved successfully" << endl;
 		}
@@ -642,6 +647,11 @@ struct Board {
 			int newX;
 			int newY;
 			ss >> newX >> newY;
+
+			if (ss.fail() || !ss.eof()) {
+				cout << "error occured. invalid coordinates" << endl;
+				return;
+			}
 
 			figure->editCoordinates(newX, newY, 0, 0);
 			cout << "moved successfully" << endl;
