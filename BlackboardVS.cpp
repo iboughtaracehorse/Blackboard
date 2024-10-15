@@ -813,9 +813,10 @@ public:
 		string color;
 		string alias;
 
-		ss >> figure >> alias >> x >> y >> height >> color;
+		ss >> figure >> alias >> x >> y;
 
 		if (figure == "line") {
+			ss >> x2 >> y2 >> color;
 
 			if (x == x2 || y == y2) {
 				Line* line = new Line(x, y, x2, y2, color, alias);
@@ -828,18 +829,21 @@ public:
 		}
 
 		else if (figure == "triangle") {
+			ss >> height >> color;
 			Triangle* triangle = new Triangle(x, y, height, color, alias);
 			board.addFigure(triangle);
 			cout << "new triangle named " << alias << " was added!" << endl;
 		}
 
 		else if (figure == "square") {
+			ss >> height >> color;
 			Square* square = new Square(x, y, height, color, alias);
 			board.addFigure(square);
 			cout << "new square named " << alias << " was added!" << endl;
 		}
 
 		else if (figure == "circle") {
+			ss >> height >> color;
 			Circle* circle = new Circle(x, y, height, color, alias);
 			board.addFigure(circle);
 			cout << "new circle named " << alias << " was added!" << endl;
