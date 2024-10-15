@@ -637,6 +637,7 @@ struct Board {
 			int newY2;
 			cout << "enter new coordinates: ";
 			cin >> newX >> newY >> newX2 >> newY2;
+			cin.ignore();
 
 			figure->editCoordinates(newX, newY, newX2, newY2);
 		}
@@ -645,6 +646,8 @@ struct Board {
 			int newY;
 			cout << "enter new coordinates: ";
 			cin >> newX >> newY;
+			cin.ignore();
+
 			figure->editCoordinates(newX, newY, 0, 0);
 		}
 	}
@@ -715,12 +718,16 @@ public:
 		cout << "5. clear" << endl;
 		cout << "   -- description: clears the board" << endl;
 		cout << endl;
+		
+		cout << "6. select" << endl;
+		cout << "   -- description: select the figure by its alias" << endl;
+		cout << endl;
 
-		cout << "6. save" << endl;
+		cout << ". save" << endl;
 		cout << "   -- description: saves the board to the chosen file" << endl;
 		cout << endl;
 
-		cout << "7. exit" << endl;
+		cout << ". exit" << endl;
 		cout << "   -- description: exit the program, yu will lost all the progress" << endl;
 		cout << endl;
 
@@ -738,7 +745,11 @@ public:
 
 	InputParser(Board& board) : board(board) { cout << "welcome to the BLACKBOARD!!" << endl << endl; };
 
-	void commands(string command) {
+	void commands(string& input) {
+		string command;
+		stringstream ss(input);
+		ss >> command;
+		
 		if (command == "print") {
 			board.drawFigures();
 			board.print(cout);
@@ -747,7 +758,7 @@ public:
 			board.list();
 		}
 		else if (command == "add") {
-			addFigure();
+			addFigure(ss);
 		}
 		else if (command == "undo") {
 			board.undo();
@@ -792,18 +803,8 @@ public:
 		}
 	}
 
-	void addFigure() {
-		cout << "so you want to add a new figure... great! here are your options: " << endl;
-		cout << "0. line" << endl;
-		cout << "1. triangle" << endl;
-		cout << "2. square" << endl;
-		cout << "3. circle" << endl;
-
-		int userInput;
-		cout << "enter the number corresponding to the figure you want to add: ";
-		cin >> userInput;
-		cin.ignore();
-
+	void addFigure(stringstream& ss) {
+		string figure;
 		int x = 0;
 		int y = 0;
 		int height = 0;
@@ -812,25 +813,9 @@ public:
 		string color;
 		string alias;
 
-		cout << "how do you want to call your new figure: ";
-		cin >> alias;
+		ss >> figure >> alias >> x >> y >> height >> color;
 
-		cout << "enter x--position: ";
-		cin >> x;
-
-		cout << "enter y--position: ";
-		cin >> y;
-
-		if (userInput == 0) {
-			cout << "enter end x--position: ";
-			cin >> x2;
-
-			cout << "enter end y--position: ";
-			cin >> y2;
-
-			cout << "enter fill color ('none' for transparent): ";
-			cin >> color;
-			cin.ignore();
+		if (figure == "line") {
 
 			if (x == x2 || y == y2) {
 				Line* line = new Line(x, y, x2, y2, color, alias);
@@ -842,39 +827,19 @@ public:
 			}
 		}
 
-		else if (userInput == 1) {
-			cout << "enter height: ";
-			cin >> height;
-			cout << "enter fill color ('none' for transparent): ";
-			cin >> color;
-			cin.ignore();
-
-
+		else if (figure == "triangle") {
 			Triangle* triangle = new Triangle(x, y, height, color, alias);
 			board.addFigure(triangle);
 			cout << "new triangle named " << alias << " was added!" << endl;
 		}
-		else if (userInput == 2) {
-			cout << "enter height: ";
-			cin >> height;
-			cout << "enter fill color ('none' for transparent): ";
-			cin >> color;
-			cin.ignore();
 
-
+		else if (figure == "square") {
 			Square* square = new Square(x, y, height, color, alias);
 			board.addFigure(square);
 			cout << "new square named " << alias << " was added!" << endl;
 		}
 
-		else if (userInput == 3) {
-			cout << "enter diameter: ";
-			cin >> height;
-			cout << "enter fill color ('none' for transparent): ";
-			cin >> color;
-			cin.ignore();
-
-
+		else if (figure == "circle") {
 			Circle* circle = new Circle(x, y, height, color, alias);
 			board.addFigure(circle);
 			cout << "new circle named " << alias << " was added!" << endl;
