@@ -728,12 +728,24 @@ public:
 		cout << "6. select" << endl;
 		cout << "   -- description: select the figure by its alias" << endl;
 		cout << endl;
-
-		cout << ". save" << endl;
-		cout << "   -- description: saves the board to the chosen file" << endl;
+		
+		cout << "7. select" << endl;
+		cout << "   -- description: select the figure by its alias" << endl;
+		cout << endl;
+		
+		cout << "6. repaint" << endl;
+		cout << "   -- description: changes color of the figure. only if selected" << endl;
 		cout << endl;
 
-		cout << ". exit" << endl;
+		cout << "7. edit" << endl;
+		cout << "   -- description: multiplies height/diameter by coefficient in order to scale the figure. only if selected" << endl;
+		cout << endl;
+		
+		cout << "8. edit" << endl;
+		cout << "   -- description: changes coordinates. only if selected" << endl;
+		cout << endl;
+
+		cout << "9. exit" << endl;
 		cout << "   -- description: exit the program, yu will lost all the progress" << endl;
 		cout << endl;
 
