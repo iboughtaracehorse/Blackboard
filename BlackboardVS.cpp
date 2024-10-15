@@ -557,26 +557,33 @@ struct Board {
 			stringstream ss(currentLine);
 			ss >> type >> alias;
 
-			if (type == "line") {
+			if (type == "Line") {
 				int x, y, x2, y2;
 				string color;
 				ss >> x >> y >> x2 >> y2 >> color;
 				Line* line = new Line(x, y, x2, y2, color, alias);
 				addFigure(line);
 			}
-			else if (type == "triangle") {
+			else if (type == "Triangle") {
 				int x, y, height;
 				string color;
 				ss >> x >> y >> height >> color;
 				Triangle* triangle = new Triangle(x, y, height, color, alias);
 				addFigure(triangle);
 			}
-			else if (type == "square") {
+			else if (type == "Square") {
 				int x, y, height;
-				string color;
+				string color;   
 				ss >> x >> y >> height >> color;
 				Square* square = new Square(x, y, height, color, alias);
 				addFigure(square);
+			}
+			else if (type == "Circle") {
+				int x, y, height;
+				string color;   
+				ss >> x >> y >> height >> color;
+				Circle* circle = new Circle(x, y, height, color, alias);
+				addFigure(circle);
 			}
 		}
 	}
